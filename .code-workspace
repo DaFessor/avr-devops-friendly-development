@@ -36,7 +36,8 @@
 			"target_test": true,
 			"native_test": true,
 			"deps": true,
-			"build": true
+			"build": true,
+			".readme": true
 		},
 	}
 }
