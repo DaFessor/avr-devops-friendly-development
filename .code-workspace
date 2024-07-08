@@ -37,7 +37,7 @@
 			"native_test": true,
 			"deps": true,
 			"build": true,
-			".readme": true
+			".gitemptyfolder": true
 		},
 	}
 }
