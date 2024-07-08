@@ -32,8 +32,6 @@
 		},
 		"files.exclude": {
 			"**/.git": true,
-			".gitignore": true,
-			".gitattributes": true,
 			"target_firmware": true,
 			"target_test": true,
 			"native_test": true,
