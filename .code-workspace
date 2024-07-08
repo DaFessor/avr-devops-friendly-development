@@ -1,0 +1,44 @@
+{
+	"folders": [
+		{
+			"name": "Toplevel project",
+			"path": "./"
+		},
+		{
+			"name": "-- Subproject - target firmware",
+			"path": "./target_firmware"
+		},
+		{
+			"name": "-- Subproject - target tests",
+			"path": "./target_test"
+		},
+		{
+			"name": "-- Subproject - native tests",
+			"path": "./native_test"
+		},
+		{
+			"name": "-- Dependencies",
+			"path": "./deps"
+		},
+		{
+			"name": "-- Builds",
+			"path": "build"
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.h": "c",
+			"*.c": "c"
+		},
+		"files.exclude": {
+			"**/.git": true,
+			".gitignore": true,
+			".gitattributes": true,
+			"target_firmware": true,
+			"target_test": true,
+			"native_test": true,
+			"deps": true,
+			"build": true
+		},
+	}
+}

@@ -1,0 +1,15 @@
+{
+    // Global project settings used across all sub-projects
+    // Editor settings set to help ensure consistency
+    "editor.autoIndent": "advanced",
+    "editor.formatOnSave": true,
+    "editor.useTabStops": false,
+    "editor.insertSpaces": true,
+    "editor.tabSize": 4,
+    "editor.trimAutoWhitespace": true,
+    "editor.indentSize": "tabSize",
+    // Global C/C++ settings
+    "C_Cpp.default.cppStandard": "c++17",
+    "C_Cpp.default.cStandard": "c17",
+    "C_Cpp.default.intelliSenseMode": "gcc-x64"
+}

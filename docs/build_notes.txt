@@ -1,0 +1,2 @@
+When the option -mmcu=atmega2560 is specified for the compiler (avr-gcc) these symbols are automatically defined:
+#define __AVR_ATmega2560__

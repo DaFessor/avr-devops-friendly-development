@@ -1,0 +1,59 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build active file",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "compile",
+                "${file}"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build native tests",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "native_tests"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "Run native tests",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "run_native_tests"
+            ],
+            "problemMatcher": [
+                "$tsc"
+            ],
+            "presentation": {
+                "reveal": "always"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

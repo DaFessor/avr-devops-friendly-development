@@ -1,0 +1,31 @@
+{
+    "configurations": [
+        {
+            "name": "Native",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "mergeConfigurations": false,
+            "compilerArgs": [
+                "-funsigned-char",
+                "-funsigned-bitfields",
+                "-ffunction-sections",
+                "-fdata-sections",
+                "-fpack-struct",
+                "-fshort-enums",
+                "-std=c17"
+            ],
+            "includePath": [
+                "${workspaceFolder}/src",
+                "${workspaceFolder}/../target_firmware/src",
+                "${workspaceFolder}/../deps/unity/src",
+                "${workspaceFolder}/../deps/cmock/src",
+                "${workspaceFolder}/../build/native_test/release/**",
+                "${workspaceFolder}/../build/native_test/debug/**"
+            ]
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}

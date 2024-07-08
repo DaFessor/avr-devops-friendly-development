@@ -1,0 +1,44 @@
+Compile/build options used
+====================
+
+**** Options used for compiling individual .c-files ****
+
+-funsigned-char         // Make "char" unsigned by default
+-funsigned-bitfields    // When "signed" or "unsigned" is not given make the bitfield unsigned
+-DDEBUG                 // Define C preprocessor sýmbol DEBUG
+-DRELEASE               // Define C preprocessor sýmbol DEBUG
+-I"directory"           // Add directory to list of directories to search for #include files
+-O0                     // Don't do any optimizations *at all*
+-Os                     // Optimize for smallest size/memory use
+                        // --- All -f options are platform independent
+-ffunction-sections     // Place each function into its own section
+-fdata-sections         // Place data items into their own section
+-fpack-struct           // Pack structure members together without holes
+-fshort-enums           // Use the narrowest integer type possible for enumeration types
+-mrelax                 // Relax branches (target specific)
+-g2                     // g=generate debug info in default format 2=add
+-Wall                   // Show all warnings
+-mmcu=atmega2560        // Select the target MCU
+-c                      // Compile and assemble, but do not link
+-std=c18                // Conform to the ISO 2017 C standard (published in 2018)
+-Werror                 // Treat all warnings as errors
+-MD                     // Generate make dependencies and compile (to detect dependencies from #include files)
+-MP                     // Generate phony targets for all headers
+-MF "file"              // Write dependency output to the given file
+-MT"target"             // Add a target (in dependency file) that does not require quoting
+-MT"target"             // Add a target (in dependency file)that does not require quoting
+-o "file"               // Place output in file
+<last argument>         // Last argument is file to compile
+
+**** Options used for linking the compiled .o-files into a complete application ****
+In general -Wl,<options> means "pass comma-separated <options> on to the linker"
+
+-Wl,-Map="file"         // Write a linker map to file.map
+                        // --- Libraries/archives can be grouped w. --start-group lib1 lib2 ... libN --end-group
+                        // --- The libs inside a group may searched repeatedly to resolve symbols
+-Wl,--start-group       // Start a group
+-Wl,-lm                 // Search libm.a (libm is a math library)
+-Wl,--end-group         // End group
+-Wl,--gc-sections       // Remove unused sections
+-mrelax                 // Relax branches
+-mmcu=atmega2560        // Select the target MCU

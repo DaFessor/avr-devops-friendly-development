@@ -1,0 +1,26 @@
+// For format details, see https://aka.ms/devcontainer.json
+{
+	"name": "iot",
+	"build": {
+		"dockerfile": "Dockerfile",
+	},
+	"mounts": [
+		"type=bind,source=/dev,target=/dev/host"
+	],
+	"containerEnv": {
+		"GEM_HOME": "/home/devuser/.gem"
+	},
+	"privileged": true,
+	// Configure tool-specific properties.
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"ms-vscode.cpptools",
+				"ms-vscode.cpptools-themes",
+				"bitwisecook.tcl",
+				"augustocdias.tasks-shell-input"
+			]
+		}
+	},
+	"remoteUser": "devuser"
+}

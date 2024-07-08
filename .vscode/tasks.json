@@ -1,0 +1,34 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Initialize project (build all subprojects",
+            "type": "shell",
+            "command": "make",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Clean project (remove all generated files)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": []
+        },
+        {
+            "label": "Reset project (clean and remove downloaded files)",
+            "type": "shell",
+            "command": "make",
+            "args": [
+                "reset"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,34 @@
+{
+    "configurations": [
+        {
+            "name": "Arduino",
+            "compilerPath": "/usr/bin/avr-gcc",
+            "compilerArgs": [
+                "-funsigned-char -funsigned-bitfields -DF_CPU=16000000L -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall -mmcu=atmega2560"
+            ],
+            "intelliSenseMode": "gcc-x64",
+            "includePath": [
+                "/usr/avr/include",
+                "/usr/lib/gcc/avr/14.1.0/include",
+                "/usr/lib/gcc/avr/14.1.0/include-fixed",
+                "${workspaceFolder}/../target_firmware/src/**",
+                "${workspaceFolder}/../deps/unity/src",
+                "${workspaceFolder}/../build/target_test/release/**",
+                "${workspaceFolder}/../build/target_test/debug/**"
+            ],
+            "defines": [
+                "-DF_CPU=16000000L",
+                "__AVR_ATmega2560__",
+                "DPLATFORMIO=60115",
+                "ARDUINO_AVR_MEGA2560",
+                "F_CPU=16000000UL",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808"
+            ],
+            "cStandard": "c17",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4,
+    "enableConfigurationSquiggles": true
+}
