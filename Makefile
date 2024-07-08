@@ -16,42 +16,40 @@ LOWER_CONFIG := $(shell echo $(CONFIG) | tr A-Z a-z)
 # files or folders. This allows us to use target names that are the same as
 # the folders we use, without make getting confused and trying to create files
 # or folders with the same names.
-.PHONY: all target_firmware target_tests native_tests run_native flash_firmware flash_test
+.PHONY: all init target_firmware target_tests native_tests run_native flash_firmware flash_test
 
 # The default target if no specific target was specified = build all executables
 all: target_firmware target_tests native_tests
 
-# All the specific targets ......
+$(WORKSPACE)/build:
+	@mkdir -p $(WORKSPACE)/build
 
-target_firmware:
+$(WORKSPACE)/build/target_firmware_:
+	@mkdir -p $(WORKSPACE)/build/target_firmware_
+
+$(WORKSPACE)/build/target_test_:
+	@mkdir -p $(WORKSPACE)/build/target_test_
+
+$(WORKSPACE)/build/native_test_:
+	@mkdir -p $(WORKSPACE)/build/native_test_
+
+init: $(WORKSPACE)/build $(WORKSPACE)/build/target_firmware_ $(WORKSPACE)/build/target_test_ (WORKSPACE)/build/native_test_
+
+target_firmware: init
 	@mkdir -p $(WORKSPACE)/build/target_firmware/$(LOWER_CONFIG)
 	@$(MAKE) --directory=$(WORKSPACE)/build/target_firmware/$(LOWER_CONFIG) --no-builtin-rules\
 	  --makefile=$(WORKSPACE)/target_firmware/Makefile
 
-flash_firmware:
-	@mkdir -p $(WORKSPACE)/build/target_firmware/$(LOWER_CONFIG)
-	@$(MAKE) --directory=$(WORKSPACE)/build/target_firmware/$(LOWER_CONFIG) --no-builtin-rules\
-	  --makefile=$(WORKSPACE)/target_firmware/Makefile flash
-
-target_tests:
+target_tests: init
 	@mkdir -p $(WORKSPACE)/build/target_test/$(LOWER_CONFIG)
 	@$(MAKE) --directory=$(WORKSPACE)/build/target_test/$(LOWER_CONFIG) --no-builtin-rules\
 	  --makefile=$(WORKSPACE)/target_test/Makefile
 
-flash_test:
-	@mkdir -p $(WORKSPACE)/build/target_test/$(LOWER_CONFIG)
-	@$(MAKE) --directory=$(WORKSPACE)/build/target_test/$(LOWER_CONFIG) --no-builtin-rules\
-	  --makefile=$(WORKSPACE)/test/target/Makefile flash
-
-native_tests:
+native_tests: init
 	@mkdir -p $(WORKSPACE)/build/native_test/$(LOWER_CONFIG)
 	@$(MAKE) --directory=$(WORKSPACE)/build/native_test/$(LOWER_CONFIG) --no-builtin-rules\
 	  --makefile=$(WORKSPACE)/native_test/Makefile
 
-run_native_tests:
-	@mkdir -p $(WORKSPACE)/build/native_test/$(LOWER_CONFIG)
-	@$(MAKE) --directory=$(WORKSPACE)/build/native_test/$(LOWER_CONFIG) --no-builtin-rules\
-	  --makefile=$(WORKSPACE)/native_test/Makefile run
 
 # Since all derived files and stuff goes into the build directory,
 # it's easy to clean up for fresh builds by just deleting the build

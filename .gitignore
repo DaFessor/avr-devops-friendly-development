@@ -1,4 +1,4 @@
-build/**
+build/*_/**
 deps/**
 !deps/Makefile
 !deps/deps.mk
