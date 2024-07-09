@@ -5,15 +5,15 @@
 			"path": "./"
 		},
 		{
-			"name": "-- Subproject - target firmware",
+			"name": "-- Subproject : target firmware",
 			"path": "./target_firmware"
 		},
 		{
-			"name": "-- Subproject - target tests",
+			"name": "-- Subproject : target tests",
 			"path": "./target_test"
 		},
 		{
-			"name": "-- Subproject - native tests",
+			"name": "-- Subproject : native tests",
 			"path": "./native_test"
 		},
 		{
@@ -37,7 +37,7 @@
 			"native_test": true,
 			"deps": true,
 			"build": true,
-			".gitemptyfolder": true
+			"**/.gitemptyfolder": true
 		},
 	}
 }
