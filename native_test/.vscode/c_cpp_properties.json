@@ -21,8 +21,8 @@
                 "${workspaceFolder}/../target_firmware/src",
                 "${workspaceFolder}/../deps/unity/src",
                 "${workspaceFolder}/../deps/cmock/src",
-                "${workspaceFolder}/../build/native_test/release/**",
-                "${workspaceFolder}/../build/native_test/debug/**"
+                "${workspaceFolder}/../build/native_test_/release/**",
+                "${workspaceFolder}/../build/native_test_/debug/**"
             ]
         }
     ],

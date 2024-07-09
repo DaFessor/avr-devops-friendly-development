@@ -13,8 +13,8 @@
                 "/usr/lib/gcc/avr/14.1.0/include-fixed",
                 "${workspaceFolder}/../target_firmware/src/**",
                 "${workspaceFolder}/../deps/unity/src",
-                "${workspaceFolder}/../build/target_test/release/**",
-                "${workspaceFolder}/../build/target_test/debug/**"
+                "${workspaceFolder}/../build/target_test_/release/**",
+                "${workspaceFolder}/../build/target_test_/debug/**"
             ],
             "defines": [
                 "-DF_CPU=16000000L",

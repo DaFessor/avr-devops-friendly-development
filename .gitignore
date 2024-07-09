@@ -1,5 +1,2 @@
 build/**
-deps/**
-!deps/Makefile
-!deps/deps.mk
 !build/**/.gitemptyfolder
