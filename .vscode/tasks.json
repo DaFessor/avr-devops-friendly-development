@@ -13,6 +13,15 @@
             "problemMatcher": []
         },
         {
+            "label": "IoT: Build project (all subprojects)",
+            "type": "shell",
+            "command": "make ${input:build_config}",
+            "runOptions": {
+                "runOn": "folderOpen"
+            },
+            "problemMatcher": []
+        },
+        {
             "label": "IoT: Clean project (remove all generated files)",
             "type": "shell",
             "command": "make",
@@ -29,6 +38,17 @@
                 "reset"
             ],
             "problemMatcher": []
+        }
+    ],
+    "inputs": [
+        {
+            "description": "Select the build configuration",
+            "id": "build_config",
+            "type": "pickString",
+            "options": [
+                "RELEASE",
+                "DEBUG"
+            ]
         }
     ]
 }
