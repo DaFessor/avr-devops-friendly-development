@@ -44,6 +44,7 @@ clean:
 	@$(MAKE) --makefile=$(ROOTDIR)/native_test/Makefile clean
 
 # A reset totally resets the project, deleting all build AND
-# downloaded deps. This is useful if you want to start from scratch.
+# downloaded deps. This is useful if you want to start completely
+# from scratch.
 reset: clean
 	@$(MAKE) --makefile=$(ROOTDIR)/external_deps/Makefile clean

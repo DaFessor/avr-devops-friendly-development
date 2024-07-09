@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Initialize project (build all subprojects",
+            "label": "IoT: Initialize project (build all in release config)",
             "type": "shell",
             "command": "make",
             "runOptions": {
@@ -13,7 +13,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Clean project (remove all generated files)",
+            "label": "IoT: Clean project (remove all generated files)",
             "type": "shell",
             "command": "make",
             "args": [
@@ -22,7 +22,7 @@
             "problemMatcher": []
         },
         {
-            "label": "Reset project (clean and remove downloaded files)",
+            "label": "IoT: Reset project (clean AND remove downloaded files)",
             "type": "shell",
             "command": "make",
             "args": [

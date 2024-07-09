@@ -1,7 +1,7 @@
 {
 	"folders": [
 		{
-			"name": "Toplevel project",
+			"name": "<Root project>",
 			"path": "./"
 		},
 		{
@@ -21,7 +21,7 @@
 			"path": "./external_deps"
 		},
 		{
-			"name": "Builds",
+			"name": "Build folder",
 			"path": "build"
 		}
 	],
