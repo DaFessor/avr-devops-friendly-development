@@ -9,16 +9,16 @@ endif
 
 BUILDROOT := $(PROJROOT)/build/native_test_
 BUILDDIR := $(BUILDROOT)/$(shell echo $(CONFIG) | tr A-Z a-z)
+DEPSROOT := $(PROJROOT)/build/deps_
 
 .PHONY: all native_tests alltests run_native_tests clean compile
 all: native_tests
 
 include $(PROJROOT)/configs_native.mk
-include $(PROJROOT)/deps/deps.mk
 include $(wildcard $(BUILDDIR)/*.dep)
 
-UNITY_DIR   := $(PROJROOT)/deps/unity
-CMOCK_DIR   := $(PROJROOT)/deps/cmock
+UNITY_DIR   := $(DEPSROOT)/unity
+CMOCK_DIR   := $(DEPSROOT)/cmock
 TEST_SRCDIR := $(PROJROOT)/native_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
 INCLUDEDIRS :=  -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(PROD_SRCDIR) -I$(TEST_SRCDIR) -I$(BUILDDIR)
@@ -27,7 +27,7 @@ vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUIL
 vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 
-native_tests: init $(PROJROOT)/deps/unity $(PROJROOT)/deps/cmock alltests
+native_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock alltests
 
 $(BUILDROOT)/release:
 	mkdir -p $(BUILDROOT)/release
@@ -36,6 +36,12 @@ $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
 init: $(BUILDROOT)/release $(BUILDROOT)/debug
+
+$(DEPSROOT)/.installed_unity:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_cmock:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
@@ -54,7 +60,10 @@ compile: init $(lastword $(MAKECMDGOALS))
 #	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
 
 clean:
-	rm -rf $(BUILDROOT)
+	@find $(BUILDROOT)/debug -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/debug -type f | grep -v ".gitemptyfolder" | xargs rm -rf
+	@find $(BUILDROOT)/release -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/release -type f | grep -v ".gitemptyfolder" | xargs rm -rf
 
 $(BUILDDIR)/%_runner.o: %.c
 	ruby $(UNITY_DIR)/auto/generate_test_runner.rb $< $(patsubst %.o,%.c,$@)

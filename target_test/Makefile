@@ -10,16 +10,16 @@ endif
 BUILDROOT := $(PROJROOT)/build/target_test_
 CONFIG_LOWER := $(shell echo $(CONFIG) | tr A-Z a-z)
 BUILDDIR := $(BUILDROOT)/$(CONFIG_LOWER)
+DEPSROOT := $(PROJROOT)/build/deps_
 
 .PHONY: all clean target_tests
 all: target_tests
 
 include $(PROJROOT)/configs_target.mk
-include $(PROJROOT)/deps/deps.mk
 include $(wildcard $(BUILDDIR)/*.dep)
 
-UNITY_DIR   := $(PROJROOT)/deps/unity
-CMOCK_DIR   := $(PROJROOT)/deps/cmock
+UNITY_DIR   := $(DEPSROOT)/unity
+CMOCK_DIR   := $(DEPSROOT)/cmock
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
 INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(PROD_SRCDIR) -I$(BUILDDIR)
@@ -36,6 +36,12 @@ $(BUILDROOT)/debug:
 
 init: $(BUILDROOT)/release $(BUILDROOT)/debug
 
+$(DEPSROOT)/.installed_unity:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_cmock:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
@@ -48,7 +54,10 @@ compile: init $(lastword $(MAKECMDGOALS))
 	$(lastword $^)
 
 clean:
-	rm -rf $(BUILDROOT)
+	@find $(BUILDROOT)/debug -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/debug -type f | grep -v ".gitemptyfolder" | xargs rm -rf
+	@find $(BUILDROOT)/release -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/release -type f | grep -v ".gitemptyfolder" | xargs rm -rf
 
 $(BUILDDIR)/%_runner.o: %.c
 	ruby $(UNITY_DIR)/auto/generate_test_runner.rb $< $(patsubst %.o,%.c,$@)
@@ -119,7 +128,7 @@ $(eval $(call TEST_DEFINITION, test_add_op.c, serial_com.c add_op.c))
 
 # ================== Define all tests ABOVE this line ==================
 
-target_tests: init $(PROJROOT)/deps/unity $(PROJROOT)/deps/cmock $(ALLTESTS)
+target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(ALLTESTS)
 	@printf "\n\n********* There are $$(ls $(BUILDDIR)/*.hex | wc -w) flashable target test(s) in $(CONFIG_LOWER) config *********\n"
 	@avr-size $(BUILDDIR)/*.elf
 	@printf "\n\n"

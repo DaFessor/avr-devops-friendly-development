@@ -1,7 +1,7 @@
 #!/bin/sh
 
 PROJ_DIR=$(realpath $(dirname $(realpath $0))/..)
-CMOCK_SCRIPT=${PROJ_DIR}/deps/cmock/lib/cmock.rb
+CMOCK_SCRIPT=${PROJ_DIR}/build/deps_/cmock/lib/cmock.rb
 CMOCK_CONFIG=${PROJ_DIR}/native_test/cmock_config.yml
 
 
@@ -33,4 +33,3 @@ if [ -z ${FILE2MOCK} ]; then
 fi
 
 ruby "${CMOCK_SCRIPT}" -o"${CMOCK_CONFIG}" "${FILE2MOCK}"
-

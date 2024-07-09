@@ -15,7 +15,6 @@ BUILDDIR := $(BUILDROOT)/$(CONFIG_LOWER)
 all: target_firmware
 
 include $(PROJROOT)/configs_target.mk
-include $(PROJROOT)/deps/deps.mk
 include $(wildcard $(BUILDDIR)/*.dep)
 
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
@@ -59,4 +58,7 @@ compile: init $(lastword $(MAKECMDGOALS))
 target_firmware: init $(BUILDDIR)/firmware.hex
 
 clean:
-	rm -rf $(BUILDROOT)
+	@find $(BUILDROOT)/debug -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/debug -type f | grep -v ".gitemptyfolder" | xargs rm -rf
+	@find $(BUILDROOT)/release -type d -mindepth 1 | xargs rm -rf
+	@find $(BUILDROOT)/release -type f | grep -v ".gitemptyfolder" | xargs rm -rf
