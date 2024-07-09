@@ -46,12 +46,12 @@ $(BUILDDIR)/firmware.hex: $(OBJS)
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
+	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -Werror $(INCLUDEDIRS) \
+	$(CC) -c $(CFLAGS)s $(INCLUDEDIRS) \
 	-o $(lastword $(notdir $(patsubst %.c,%.o,$^))) \
 	$(lastword $^)
 

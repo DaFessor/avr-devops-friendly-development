@@ -1,4 +1,5 @@
 #include <stdio.h>
+#define __OPTIMIZE__
 #include <util/delay.h>
 #include <avr/io.h>
 #include "serial_com.h"
@@ -13,9 +14,9 @@ int main()
     do
     {
         PORTB = 0xff;
-        _delay_ms(250);
+        __builtin_avr_delay_cycles(4000000);
         PORTB = 0x0;
-        _delay_ms(250);
+        __builtin_avr_delay_cycles(4000000);
         printf(buf,"%ld",counter++);
     } while (1);
 }

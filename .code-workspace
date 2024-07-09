@@ -5,23 +5,23 @@
 			"path": "./"
 		},
 		{
-			"name": "-- Subproject : target firmware",
+			"name": "-- Target firmware",
 			"path": "./target_firmware"
 		},
 		{
-			"name": "-- Subproject : target tests",
+			"name": "-- Target tests",
 			"path": "./target_test"
 		},
 		{
-			"name": "-- Subproject : native tests",
+			"name": "-- Native tests",
 			"path": "./native_test"
 		},
 		{
-			"name": "-- Subproject : external dependencies",
+			"name": "-- External dependencies",
 			"path": "./external_deps"
 		},
 		{
-			"name": "-- Folder : builds",
+			"name": "Builds",
 			"path": "build"
 		}
 	],

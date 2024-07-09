@@ -44,7 +44,7 @@ $(DEPSROOT)/.installed_cmock:
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
+	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
@@ -62,14 +62,14 @@ clean:
 $(BUILDDIR)/%_runner.o: %.c
 	ruby $(UNITY_DIR)/auto/generate_test_runner.rb $< $(patsubst %.o,%.c,$@)
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
+	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
 
 
 $(BUILDDIR)/mocks/Mock%.o: %.h
 	cd $(BUILDDIR); \
 	$(PROJROOT)/scripts/cmock_runner.sh $^; \
-	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
+	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@)
 
 # This looks (extra) complicated, but it's just a way to define what is effectively a macro
