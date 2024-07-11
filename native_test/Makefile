@@ -150,7 +150,6 @@ alltests: $(ALLTESTS)
 
 run_native_tests: native_tests
 	@for test in $(ALLTESTS); do \
-		printf ">>>>>>>>> Start test: $$(basename $${test})\n"; \
 		$$test; \
-		printf "<<<<<<<<< End test: $$(basename $${test})\n\n\n"; \
+		printf "\n"; \
 	done

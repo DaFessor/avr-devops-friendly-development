@@ -20,7 +20,26 @@
             }
         },
         {
-            "label": "2 - Run native tests in release config",
+            "label": "2 - Build native tests in debug config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "native_tests",
+                "CONFIG=DEBUG"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "3 - Run native tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -49,25 +68,6 @@
             "group": {
                 "kind": "test",
                 "isDefault": true
-            }
-        },
-        {
-            "label": "3 - Build native tests in debug config",
-            "command": "make",
-            "type": "shell",
-            "args": [
-                "native_tests",
-                "CONFIG=DEBUG"
-            ],
-            "problemMatcher": [
-                "$gcc"
-            ],
-            "presentation": {
-                "reveal": "always",
-                "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
