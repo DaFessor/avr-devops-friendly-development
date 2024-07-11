@@ -18,7 +18,24 @@
             }
         },
         {
-            "label": "2 - Run target tests in release config",
+            "label": "2 - Build target tests in debug config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "target_tests",
+                "CONFIG=DEBUG"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "3 - Run target tests in release config",
             "command": "${workspaceFolder}/../scripts/run_target_test.sh",
             "type": "shell",
             "args": [
@@ -47,23 +64,6 @@
             "group": {
                 "kind": "test",
                 "isDefault": true
-            }
-        },
-        {
-            "label": "3 - Build target tests in debug config",
-            "command": "make",
-            "type": "shell",
-            "args": [
-                "target_tests",
-                "CONFIG=DEBUG"
-            ],
-            "problemMatcher": [],
-            "presentation": {
-                "reveal": "always",
-                "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {

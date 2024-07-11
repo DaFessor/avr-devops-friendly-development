@@ -18,10 +18,12 @@ else
     RUNDIR="${PROJ_DIR}/build/target_test_/debug"
 fi
 
-cd ${RUNDIR}
+LOGFILE=${RUNDIR}/$(basename -s .hex ${1}).log
 
+cd ${RUNDIR}
 make --directory=${RUNDIR} --no-builtin-rules --makefile=${PROJ_DIR}/native_test/Makefile target_tests 2&>1 > /dev/null
 
 ${PROJ_DIR}/scripts/run_avrdude.sh ${1}
+${PROJ_DIR}/scripts/serial_monitor.tcl "(?w)^(OK|FAIL)$" ${LOGFILE}
 
-${PROJ_DIR}/scripts/serial_monitor.tcl "(?w)^(OK|FAIL)$" ${RUNDIR}/$(basename -s .hex ${1}).log
+printf "\n*** Logfile with test results saved in ${LOGFILE} ***\n\n"
