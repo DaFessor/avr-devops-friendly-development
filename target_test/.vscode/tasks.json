@@ -36,6 +36,9 @@
         },
         {
             "label": "3 - Run target tests in release config",
+            "dependsOn": [
+                "1 - Build target tests in release config"
+            ],
             "command": "${workspaceFolder}/../scripts/run_target_test.sh",
             "type": "shell",
             "args": [
@@ -68,6 +71,9 @@
         },
         {
             "label": "4 - Run target tests in debug config",
+            "dependsOn": [
+                "2 - Build target tests in debug config"
+            ],
             "command": "${workspaceFolder}/../scripts/run_target_test.sh",
             "type": "shell",
             "args": [
