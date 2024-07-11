@@ -1,7 +1,7 @@
 {
 	"folders": [
 		{
-			"name": "<Root project>",
+			"name": "Root project",
 			"path": "./"
 		},
 		{
@@ -39,5 +39,33 @@
 			"build": true,
 			"**/.gitemptyfolder": true
 		},
+		"taskExplorer.enabledTasks": {
+			"ant": false,
+			"bash": false,
+			"composer": false,
+			"gradle": false,
+			"grunt": false,
+			"gulp": false,
+			"make": false,
+			"maven": false,
+			"npm": false,
+			"perl": false,
+			"pipenv": false,
+			"powershell": false,
+			"python": false,
+			"ruby": false,
+			"tsc": false
+		},
+		"taskExplorer.showHiddenWsTasks": false,
+		"taskExplorer.showLastTasks": false,
+		"taskExplorer.showFavoritesButton": true,
+		"taskExplorer.enableAnsiconForAnt": false,
+		"taskExplorer.groupStripTaskLabel": false,
+		"taskExplorer.enableSideBar": true,
+		"taskExplorer.enableExplorerView": true,
+		"taskExplorer.clickAction": "Execute",
+		"taskExplorer.groupMaxLevel": 1,
+		"taskExplorer.showExecuteWithArgumentsButton": false,
+		"taskExplorer.showExecuteWithNoTerminalButton": false
 	}
 }

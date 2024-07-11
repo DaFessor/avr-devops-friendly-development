@@ -11,11 +11,10 @@ set project_path [ file dirname [ file dirname [ file normalize [ info script ] 
 set stop_pattern [lindex $argv 0]
 set output_file [lindex $argv 1]
 
-set fd [open "$output_file" w]
+set fd [open $output_file w]
 fconfigure $fd -buffersize 4000
 set timeout 10
 
-#spawn /workspaces/iot-ws-2/scripts/run_avrdude.sh /workspaces/iot-ws-2/build/target_firmware/firmware.hex
 spawn -noecho microcom -s 115200 /dev/host/ttyACM0
 
 expect {

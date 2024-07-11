@@ -2,53 +2,47 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build active file",
-            "command": "make",
-            "type": "shell",
-            "args": [
-                "compile",
-                "${file}"
-            ],
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "presentation": {
-                "reveal": "always"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Build target tests",
+            "label": "1 - Build target tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
                 "target_tests"
             ],
-            "problemMatcher": [
-                "$tsc"
-            ],
+            "problemMatcher": [],
             "presentation": {
-                "reveal": "always"
+                "reveal": "always",
+                "clear": true
             },
             "group": {
                 "kind": "build"
             }
         },
         {
-            "label": "Run target tests",
-            "command": "make",
+            "label": "2 - Run target tests in release config",
+            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
             "type": "shell",
             "args": [
-                "run_target_tests"
+                "${input:releaseHexFiles}"
             ],
-            "problemMatcher": [
-                "$tsc"
-            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
             "presentation": {
-                "reveal": "always"
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
             },
             "group": {
                 "kind": "test",
@@ -56,29 +50,85 @@
             }
         },
         {
-            "label": "Flash target test",
-            "command": "${workspaceFolder}/../scripts/run_avrdude.sh ${input:hex_files}",
+            "label": "3 - Build target tests in debug config",
+            "command": "make",
             "type": "shell",
-            "problemMatcher": [
-                "$tsc"
+            "args": [
+                "target_tests",
+                "CONFIG=DEBUG"
             ],
+            "problemMatcher": [],
             "presentation": {
-                "reveal": "always"
+                "reveal": "always",
+                "clear": true
             },
             "group": {
-                "kind": "none"
+                "kind": "build"
             }
-        }
+        },
+        {
+            "label": "4 - Run target tests in debug config",
+            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
+            "type": "shell",
+            "args": [
+                "${input:debugHexFiles}"
+            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "5 - Clean target tests",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            }
+        },
     ],
     "inputs": [
-    {
-      "id": "hex_files",
-      "type": "command",
-      "command": "shellCommand.execute",
-      "args": {
-          "command": "find ${workspaceFolder}/../build -name '*.hex'",
-          "description": "Select the hexfile to flash"
-      }
-    }
-  ]
+        {
+            "id": "releaseHexFiles",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "find ${workspaceFolder}/../build/target_test_/release -name '*.hex'",
+                "description": "Select the hexfile to flash"
+            }
+          },
+          {
+            "id": "debugHexFiles",
+            "type": "command",
+            "command": "shellCommand.execute",
+            "args": {
+                "command": "find ${workspaceFolder}/../build/target_test_/debug -name '*.hex'",
+                "description": "Select the hexfile to flash"
+            }
+          }
+    ]
 }

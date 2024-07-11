@@ -18,6 +18,7 @@
 				"ms-vscode.cpptools",
 				"ms-vscode.cpptools-themes",
 				"bitwisecook.tcl",
+				"spmeesseman.vscode-taskexplorer",
 				"augustocdias.tasks-shell-input"
 			]
 		}

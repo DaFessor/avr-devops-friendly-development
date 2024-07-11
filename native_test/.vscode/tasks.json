@@ -2,57 +2,121 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "Build active file",
-            "command": "make",
-            "type": "shell",
-            "args": [
-                "compile",
-                "${file}"
-            ],
-            "problemMatcher": [
-                "$tsc"
-            ],
-            "presentation": {
-                "reveal": "always"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
-        },
-        {
-            "label": "Build native tests",
+            "label": "1 - Build native tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
                 "native_tests"
             ],
             "problemMatcher": [
-                "$tsc"
+                "$gcc"
             ],
             "presentation": {
-                "reveal": "always"
+                "reveal": "always",
+                "clear": true
             },
             "group": {
                 "kind": "build"
             }
         },
         {
-            "label": "Run native tests",
+            "label": "2 - Run native tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
                 "run_native_tests"
             ],
-            "problemMatcher": [
-                "$tsc"
-            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
             "presentation": {
-                "reveal": "always"
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
             },
             "group": {
                 "kind": "test",
                 "isDefault": true
+            }
+        },
+        {
+            "label": "3 - Build native tests in debug config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "native_tests",
+                "CONFIG=DEBUG"
+            ],
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "4 - Run native tests in debug config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "run_native_tests",
+                "CONFIG=DEBUG"
+            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
+            },
+            "group": {
+                "kind": "test",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "5 - Clean native tests",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
             }
         }
     ]

@@ -1,19 +1,27 @@
 #!/bin/sh
 
-#if [ "${#}" -ne 1 ]; then
-#    echo "Expecting 1 argument (name of file to flash)"
-#    exit 1
-#fi
+PROJ_DIR=$(realpath $(dirname $(realpath $0))/..)
 
-#SCRIPT_DIR=$(dirname $(realpath $0))
+if [ "${#}" -lt 1 ]; then
+    echo "Expecting 1 argument <hex file to flash and run>"
+    exit 1
+fi
 
-# Flash firmware with tests
-#${SCRIPT_DIR}/run_avrdude.sh ${1}
+if [ ! -f ${1} ]; then
+    echo "Could not find hex file ${1}"
+    exit 1
+fi
 
-picocom /dev/host/ttyFLASH > picout &
-echo $!
-sleep 5
-kill -9 $!
-echo "Done!"
+if echo "${1}" | grep -q release; then
+    RUNDIR="${PROJ_DIR}/build/target_test_/release"
+else
+    RUNDIR="${PROJ_DIR}/build/target_test_/debug"
+fi
 
+cd ${RUNDIR}
 
+make --directory=${RUNDIR} --no-builtin-rules --makefile=${PROJ_DIR}/native_test/Makefile target_tests 2&>1 > /dev/null
+
+${PROJ_DIR}/scripts/run_avrdude.sh ${1}
+
+${PROJ_DIR}/scripts/serial_monitor.tcl "(?w)^(OK|FAIL)$" ${RUNDIR}/$(basename -s .hex ${1}).log

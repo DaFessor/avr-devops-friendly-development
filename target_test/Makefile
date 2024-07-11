@@ -125,12 +125,13 @@ endef
 # ================== Define all tests BELOW this line ==================
 
 $(eval $(call TEST_DEFINITION, test_add_op.c, serial_com.c add_op.c))
+$(eval $(call TEST_DEFINITION, test_mul_op.c, serial_com.c mul_op.c))
 
 # ================== Define all tests ABOVE this line ==================
 
 target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(ALLTESTS)
 	@printf "\n\n********* There are $$(ls $(BUILDDIR)/*.hex | wc -w) flashable target test(s) in $(CONFIG_LOWER) config *********\n"
-	@avr-size $(BUILDDIR)/*.elf
+	@avr-size $(BUILDDIR)/*.elf | sed "s/elf/hex/"
 	@printf "\n\n"
 
 #run_native_tests: target_tests.hex

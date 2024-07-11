@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "IoT: Initialize project (build all in release config)",
+            "label": "1 - Build all subprojects in release config",
             "type": "shell",
             "command": "make",
             "runOptions": {
@@ -13,16 +13,13 @@
             "problemMatcher": []
         },
         {
-            "label": "IoT: Build project (all subprojects)",
+            "label": "2 - Build all subprojects in debug config",
             "type": "shell",
-            "command": "make ${input:build_config}",
-            "runOptions": {
-                "runOn": "folderOpen"
-            },
+            "command": "make CONFIG=RELEASE",
             "problemMatcher": []
         },
         {
-            "label": "IoT: Clean project (remove all generated files)",
+            "label": "3 - Clean all subprojects (remove all generated files)",
             "type": "shell",
             "command": "make",
             "args": [
@@ -31,24 +28,26 @@
             "problemMatcher": []
         },
         {
-            "label": "IoT: Reset project (clean AND remove downloaded files)",
+            "label": "4 - Reset all subprojects (clean PLUS remove downloaded files)",
             "type": "shell",
             "command": "make",
             "args": [
                 "reset"
             ],
             "problemMatcher": []
-        }
-    ],
-    "inputs": [
+        },
         {
-            "description": "Select the build configuration",
-            "id": "build_config",
-            "type": "pickString",
-            "options": [
-                "RELEASE",
-                "DEBUG"
-            ]
-        }
+            "label": "Compile active file",
+            "type": "shell",
+            "command": "${workspaceFolder}/scripts/compile_active_file.sh ${workspaceFolder} ${file}",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "hide": true
+        },
     ]
 }

@@ -51,7 +51,7 @@ $(BUILDDIR)/%.o: %.c
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS)s $(INCLUDEDIRS) \
+	$(CC) -c $(CFLAGS) $(INCLUDEDIRS) \
 	-o $(lastword $(notdir $(patsubst %.c,%.o,$^))) \
 	$(lastword $^)
 
