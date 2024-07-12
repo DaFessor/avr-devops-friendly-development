@@ -6,6 +6,14 @@ if {$argc != 2} {
     exit 1
 }
 
+try {
+    set tty_dev /dev/host/[exec ls -l /dev/host/ttyFLASH | grep -o "/dev/tty.*" | cut -d/ -f3]
+    set status 0
+} trap CHILDSTATUS {results options} {
+    puts "*** Error: no flashable device found ***"
+    exit 1
+}
+
 set project_path [ file dirname [ file dirname [ file normalize [ info script ] ] ] ]
 
 set stop_pattern [lindex $argv 0]
@@ -15,7 +23,7 @@ set fd [open $output_file w]
 fconfigure $fd -buffersize 4000
 set timeout 10
 
-spawn -noecho microcom -s 115200 /dev/host/ttyACM0
+spawn -noecho microcom -s 115200 $tty_dev
 
 expect {
     -re "$stop_pattern" {
