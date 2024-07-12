@@ -18,7 +18,7 @@ checkgroup()
         usermod -a -G "${1}" "${USER}"
     else
         echo "ok, user ${USER} already in ${1} group"
-fi    
+fi
 }
 
 snapshot_tty_state()
@@ -150,15 +150,15 @@ for value in 1 2 3 4 5 6 7 8 9 10; do
     sleep 1
     snapshot_tty_state "after"
     get_added_tty
-    if [ -n "${TTYDEV}" ]; then
+    if [ -c "${TTYDEV}" ]; then
         echo "saw new mount pop up on ${TTYDEV}"
         break
     fi
 done
 clear_tty_snapshots
 
-if [ -n "${TTYDEV}" ]; then
-    echo "Found and attached usb device ${BUSID} on ${TTYDEV}"
+if [ -c "${TTYDEV}" ]; then
+    echo "Found and attached usb device ${USBID} on ${TTYDEV}"
     ln -s "${TTYDEV}" "${TTYLINK}"
     chmod 660 "${TTYLINK}"
     chown -f -h -P root:dialout "${TTYLINK}"
