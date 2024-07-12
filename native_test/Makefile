@@ -11,7 +11,7 @@ BUILDROOT := $(PROJROOT)/build/native_test_
 BUILDDIR := $(BUILDROOT)/$(shell echo $(CONFIG) | tr A-Z a-z)
 DEPSROOT := $(PROJROOT)/build/deps_
 
-.PHONY: all native_tests alltests run_native_tests clean compile
+.PHONY: all native_tests alltests run_all_tests clean compile
 all: native_tests
 
 include $(PROJROOT)/configs_native.mk
@@ -148,7 +148,7 @@ $(eval $(call TEST_DEFINITION,\
 
 alltests: $(ALLTESTS)
 
-run_native_tests: native_tests
+run_all_tests: native_tests
 	@for test in $(ALLTESTS); do \
 		$$test; \
 		printf "\n"; \
