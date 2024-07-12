@@ -1,0 +1,112 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "1 - Build target firmware in release config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "target_firmware"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "2 - Build target firmware in debug config",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "target_firmware",
+                "CONFIG=DEBUG"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always",
+                "clear": true
+            },
+            "group": {
+                "kind": "build"
+            }
+        },
+        {
+            "label": "3 - Run target in release config",
+            "dependsOn": [
+                "1 - Build target firmware in release config"
+            ],
+            "command": "${workspaceFolder}/../scripts/run_target_firmware.sh",
+            "type": "shell",
+            "args": [
+                "${workspaceFolder}/../build/target_firmware_/release/firmware.hex"
+            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
+            }
+        },
+        {
+            "label": "4 - Run target firmware in debug config",
+            "dependsOn": [
+                "2 - Build target firmware in debug config"
+            ],
+            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
+            "type": "shell",
+            "args": [
+               "${workspaceFolder}/../build/target_firmware_/debug/firmware.hex"
+            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation" : [
+                    "absolute"
+                ],
+                "pattern" :[
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
+            },
+        },
+        {
+            "label": "5 - Clean target firmware",
+            "command": "make",
+            "type": "shell",
+            "args": [
+                "clean"
+            ],
+            "problemMatcher": [],
+            "presentation": {
+                "reveal": "always"
+            }
+        },
+    ]
+}
