@@ -15,6 +15,6 @@ int main()
         __builtin_avr_delay_cycles(4000000);
         PORTB = 0x0;
         __builtin_avr_delay_cycles(4000000);
-       printf("Counter: %u\r", counter++);
+       printf("Counter: %u\n\r", counter++);
     } while (1);
 }
