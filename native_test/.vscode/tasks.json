@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1 - Build all native tests in release config",
+            "label": "4.1 - Build all native tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -20,7 +20,7 @@
             }
         },
         {
-            "label": "2 - Build all native tests in debug config",
+            "label": "4.2 - Build all native tests in debug config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -39,7 +39,7 @@
             }
         },
         {
-            "label": "3 - Run all native tests in release config",
+            "label": "4.3 - Run all native tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -71,7 +71,7 @@
             }
         },
         {
-            "label": "4 - Run all native tests in debug config",
+            "label": "4.4 - Run all native tests in debug config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -104,7 +104,7 @@
             }
         },
         {
-            "label": "5 - Clean native tests",
+            "label": "4.5 - Clean native tests",
             "command": "make",
             "type": "shell",
             "args": [

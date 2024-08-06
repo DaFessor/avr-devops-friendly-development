@@ -12,10 +12,14 @@
 1. Add comments in relevant files
     - Scripts
     - Makefiles
-1. Add a few how-to's and guidescsomewhere
+1. Add a few how-to's and guides somewhere
     - Start/stop serial monitor
     - Project layout
     - Using usb override config
+    - Bootstrapping project
+        - Checkout locally
+        - Open in VSCode
+        - Enable usb
 1. Make C++ support switchable
 
 ## Completed

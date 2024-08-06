@@ -1,27 +1,27 @@
 {
 	"folders": [
 		{
-			"name": "Root project",
+			"name": "1 Root project",
 			"path": "./"
 		},
 		{
-			"name": "-- Target firmware",
+			"name": "2 -- Target firmware",
 			"path": "./target_firmware"
 		},
 		{
-			"name": "-- Target tests",
+			"name": "3 -- Target tests",
 			"path": "./target_test"
 		},
 		{
-			"name": "-- Native tests",
+			"name": "4 -- Native tests",
 			"path": "./native_test"
 		},
 		{
-			"name": "-- External dependencies",
+			"name": "5 -- External dependencies",
 			"path": "./external_deps"
 		},
 		{
-			"name": "Build folder",
+			"name": "6 -- Build folder",
 			"path": "build"
 		}
 	],

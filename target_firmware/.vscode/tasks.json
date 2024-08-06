@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1 - Build target firmware in release config",
+            "label": "2.1 - Build target firmware in release config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -18,7 +18,7 @@
             }
         },
         {
-            "label": "2 - Build target firmware in debug config",
+            "label": "2.2 - Build target firmware in debug config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -35,7 +35,7 @@
             }
         },
         {
-            "label": "3 - Run target in release config",
+            "label": "2.3 - Run target in release config",
             "dependsOn": [
                 "1 - Build target firmware in release config"
             ],
@@ -66,7 +66,7 @@
             }
         },
         {
-            "label": "4 - Run target firmware in debug config",
+            "label": "2.4 - Run target firmware in debug config",
             "dependsOn": [
                 "2 - Build target firmware in debug config"
             ],
@@ -97,7 +97,7 @@
             },
         },
         {
-            "label": "5 - Clean target firmware",
+            "label": "2.5 - Clean target firmware",
             "command": "make",
             "type": "shell",
             "args": [

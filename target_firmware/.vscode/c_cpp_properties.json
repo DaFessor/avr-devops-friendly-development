@@ -11,7 +11,7 @@
                 "/usr/avr/include",
                 "/usr/lib/gcc/avr/14.1.0/include",
                 "/usr/lib/gcc/avr/14.1.0/include-fixed",
-                "${workspaceFolder}/../target_firmware/src/**",
+                "${workspaceFolder}/src/**",
                 "${workspaceFolder}/../build/deps_/unity/src"
             ],
             "defines": [

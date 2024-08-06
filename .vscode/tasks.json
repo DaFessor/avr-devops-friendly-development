@@ -4,7 +4,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1 - Build all subprojects in release config",
+            "label": "1.1 - Build all subprojects in release config",
             "type": "shell",
             "command": "make",
             "runOptions": {
@@ -13,13 +13,13 @@
             "problemMatcher": []
         },
         {
-            "label": "2 - Build all subprojects in debug config",
+            "label": "1.2 - Build all subprojects in debug config",
             "type": "shell",
             "command": "make CONFIG=RELEASE",
             "problemMatcher": []
         },
         {
-            "label": "3 - Clean all subprojects (remove all generated files)",
+            "label": "1.3 - Clean all subprojects (remove all generated files)",
             "type": "shell",
             "command": "make",
             "args": [
@@ -28,7 +28,7 @@
             "problemMatcher": []
         },
         {
-            "label": "4 - Reset all subprojects (clean PLUS remove downloaded files)",
+            "label": "1.4 - Reset all subprojects (clean PLUS remove downloaded files)",
             "type": "shell",
             "command": "make",
             "args": [

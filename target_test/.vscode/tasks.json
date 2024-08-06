@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1 - Build target tests in release config",
+            "label": "3.1 - Build target tests in release config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -18,7 +18,7 @@
             }
         },
         {
-            "label": "2 - Build target tests in debug config",
+            "label": "3.2 - Build target tests in debug config",
             "command": "make",
             "type": "shell",
             "args": [
@@ -35,7 +35,7 @@
             }
         },
         {
-            "label": "3 - Run target tests in release config",
+            "label": "3.3 - Run target tests in release config",
             "dependsOn": [
                 "1 - Build target tests in release config"
             ],
@@ -69,7 +69,7 @@
             }
         },
         {
-            "label": "4 - Run target tests in debug config",
+            "label": "3.4 - Run target tests in debug config",
             "dependsOn": [
                 "2 - Build target tests in debug config"
             ],
@@ -103,7 +103,7 @@
             }
         },
         {
-            "label": "5 - Clean target tests",
+            "label": "3.5 - Clean target tests",
             "command": "make",
             "type": "shell",
             "args": [

@@ -5,7 +5,7 @@
 
 int main()
 {
-    uint32_t counter = 0;
+    unsigned int counter = 0;
     uart_init();
     DDRB = 0xff;
 
@@ -15,6 +15,6 @@ int main()
         __builtin_avr_delay_cycles(4000000);
         PORTB = 0x0;
         __builtin_avr_delay_cycles(4000000);
-       printf("Counter: %ld\n\r", counter++);
+       printf("Counter: %u\r", counter++);
     } while (1);
 }
