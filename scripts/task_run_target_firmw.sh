@@ -31,7 +31,7 @@ fi
 LOGFILE=${RUNDIR}/$(basename -s .hex ${1}).log
 
 cd ${RUNDIR}
-${PROJ_DIR}/scripts/run_avrdude.sh ${1}
+${PROJ_DIR}/scripts/util_run_avrdude.sh ${1}
 microcom -s 115200 ${TTYDEV} | tee ${LOGFILE}
 
 printf "\n*** Logfile with output is saved in ${LOGFILE} ***\n\n"

@@ -21,7 +21,7 @@ fi
 LOGFILE=${RUNDIR}/$(basename -s .hex ${1}).log
 
 cd ${RUNDIR}
-${PROJ_DIR}/scripts/run_avrdude.sh ${1}
-${PROJ_DIR}/scripts/serial_monitor.tcl "(?w)^(OK|FAIL)$" ${LOGFILE}
+${PROJ_DIR}/scripts/util_run_avrdude.sh ${1}
+${PROJ_DIR}/scripts/util_serial_monitor.tcl "(?w)^(OK|FAIL)$" ${LOGFILE}
 
 printf "\n*** Logfile with test results saved in ${LOGFILE} ***\n\n"

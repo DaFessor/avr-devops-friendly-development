@@ -15,6 +15,7 @@
 1. Add a few how-to's and guidescsomewhere
     - Start/stop serial monitor
     - Project layout
+    - Using usb override config
 1. Make C++ support switchable
 
 ## Completed

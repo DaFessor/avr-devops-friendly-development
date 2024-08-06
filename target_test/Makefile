@@ -68,7 +68,7 @@ $(BUILDDIR)/%_runner.o: %.c
 
 $(BUILDDIR)/mocks/Mock%.o: %.h
 	cd $(BUILDDIR); \
-	$(PROJROOT)/scripts/cmock_runner.sh $^; \
+	$(PROJROOT)/scripts/make_cmock_runner.sh $^; \
 	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@)
 

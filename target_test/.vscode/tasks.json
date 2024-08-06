@@ -39,7 +39,7 @@
             "dependsOn": [
                 "1 - Build target tests in release config"
             ],
-            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
+            "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
             "args": [
                 "${input:releaseHexFiles}"
@@ -73,7 +73,7 @@
             "dependsOn": [
                 "2 - Build target tests in debug config"
             ],
-            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
+            "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
             "args": [
                 "${input:debugHexFiles}"

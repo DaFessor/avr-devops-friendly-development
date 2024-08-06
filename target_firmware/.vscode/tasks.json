@@ -39,7 +39,7 @@
             "dependsOn": [
                 "1 - Build target firmware in release config"
             ],
-            "command": "${workspaceFolder}/../scripts/run_target_firmware.sh",
+            "command": "${workspaceFolder}/../scripts/task_run_target_firmw.sh",
             "type": "shell",
             "args": [
                 "${workspaceFolder}/../build/target_firmware_/release/firmware.hex"
@@ -70,7 +70,7 @@
             "dependsOn": [
                 "2 - Build target firmware in debug config"
             ],
-            "command": "${workspaceFolder}/../scripts/run_target_test.sh",
+            "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
             "args": [
                "${workspaceFolder}/../build/target_firmware_/debug/firmware.hex"

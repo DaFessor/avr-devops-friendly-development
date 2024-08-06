@@ -37,9 +37,9 @@
             "problemMatcher": []
         },
         {
-            "label": "Compile active file",
+            "label": "Compile current file",
             "type": "shell",
-            "command": "${workspaceFolder}/scripts/compile_active_file.sh ${workspaceFolder} ${file}",
+            "command": "${workspaceFolder}/scripts/task_compile_curr_file.sh ${workspaceFolder} ${file}",
             "problemMatcher": [
                 "$gcc"
             ],
