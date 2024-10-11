@@ -2,15 +2,18 @@
 
 USBID_OVERRIDE_FILE="$(dirname ${0})/usb_override.cfg"
 TTYLINK="/dev/ttyFLASH"
+USBIPD_EXECUTABLE="/mnt/c/Program Files/usbipd-win/usbipd.exe"
+USER=${SUDO_USER}
 
+# Write an error message and exit
 usage()
 {
     echo "Error: ${1} "
     exit 1
 }
 
-USER=${SUDO_USER}
-
+# Make sure that the user is member of a specified group, and add the
+# user to the group if that's not the case
 checkgroup()
 {
     if ! grep "${USER}" /etc/group | grep -q "${1}"; then
@@ -21,21 +24,25 @@ checkgroup()
 fi
 }
 
+# Make a snapshot (file with a list) of all currently available tty devices
 snapshot_tty_state()
 {
     ls -l /dev/tty* | sort > "/tmp/${1}.ttystate"
 }
 
+# Remove all existing files with lists of tty devives
 clear_tty_snapshots()
 {
     rm -rf /tmp/*.ttystate
 }
 
+# Detect which tty device has disappeared
 get_removed_tty()
 {
     TTYDEV="$(diff -b /tmp/before.ttystate /tmp/after.ttystate | grep "^<.*tty.*$" | grep -o "/dev/tty.*$")"
 }
 
+# Detect which tty device has been added
 get_added_tty()
 {
     TTYDEV="$(diff -b /tmp/before.ttystate /tmp/after.ttystate | grep "^>.*tty.*$" | grep -o "/dev/tty.*$")"
@@ -49,10 +56,9 @@ if [ "$(id -u)" -ne 0 ]; then
     usage "please run this script as root or using sudo!"
 fi
 
-# Check for installation of usbipd
-USBIPD_EXECUTABLE="/mnt/c/Program Files/usbipd-win/usbipd.exe"
+# Check that usbipd has been installed
 echo -n "Checking installation of usbpid .... "
-if ! "${USBIPD_EXECUTABLE}" --version >&1 > /dev/null; then
+if ! "${USBIPD_EXECUTABLE}" --version 2>&1 > /dev/null; then
     usage "you need to install usbipd"
 else
     echo "ok, usbpipd is installed"
@@ -97,7 +103,7 @@ else
     fi
 fi
 
-# Check group memberships
+# Check group memberships (possibly adding user as needed)
 echo -n "Checking dialout group memberships .... "
 checkgroup dialout
 echo -n "Checking plugdev group memberships .... "
@@ -108,7 +114,7 @@ clear_tty_snapshots
 if "${USBIPD_EXECUTABLE}" list | grep -E "Attached" | grep -q "${USBID}"; then
     echo -n "Detaching existing usb mount for <${USBID}> .... "
     snapshot_tty_state "before"
-    if  ! "${USBIPD_EXECUTABLE}" detach "--busid=${USBID}" >&1 > /dev/null; then
+    if  ! "${USBIPD_EXECUTABLE}" detach "--busid=${USBID}" 2>&1 > /dev/null; then
         usage "usbipd detach of <${USBID}> failed, aborting script (unknown error)"
     fi
     sleep 2
@@ -127,10 +133,10 @@ else
     echo "No existing usb mount for <${USBID}>, no detach needed"
 fi
 
-# Kick to udev service to make it's runs and detects new serial devices
+# Kick to udev service to make sure it runs and detects new serial devices
 sleep 1
 echo -n "Restart udev service .................. "
-if ! service udev restart >&1 > /dev/null; then
+if ! service udev restart 2>&1 > /dev/null; then
     usage "failed (unknown error)"
 else
     echo "ok"
@@ -157,13 +163,17 @@ for value in 1 2 3 4 5 6 7 8 9 10; do
 done
 clear_tty_snapshots
 
+# Did we find a new, freshly added tty device?
 if [ -c "${TTYDEV}" ]; then
+    # Yes we, did
     echo "Found and attached usb device ${USBID} on ${TTYDEV}"
     ln -s "${TTYDEV}" "${TTYLINK}"
     chmod 660 "${TTYLINK}"
     chown -f -h -P root:dialout "${TTYLINK}"
-    echo "Created symbolic link ${TTYLINK} for usb-id <${USBID}> - use that, it will always be the same"
+    echo "Created symbolic link ${TTYLINK} for device ${TTYDEV} with }usb-id <${USBID}>"
+    echo "- use ${TTYLINK}, it will always be the same, even if the tty/com port changes"
 else
+    # Nope, no tty device
     usage ">>> Error, no new tty device appeared after attaching <${USBID}> <<<"
 fi
 
