@@ -22,6 +22,9 @@ LOGFILE=${RUNDIR}/$(basename -s .hex ${1}).log
 
 cd ${RUNDIR}
 ${PROJ_DIR}/scripts/util_run_avrdude.sh ${1}
+
+printf "\n*** To terminate logging from target press ctrl-a ctrl-x ***\n\n"
+
 ${PROJ_DIR}/scripts/util_serial_monitor.tcl "(?w)^(OK|FAIL)$" ${LOGFILE}
 
 printf "\n*** Logfile with test results saved in ${LOGFILE} ***\n\n"
