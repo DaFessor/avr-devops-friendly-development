@@ -96,6 +96,7 @@ endif
 	cd $(BUILDDIR);\
 	echo "Linking test: $$^";\
 	$(CC) $(LDFLAGS) -o $$(patsubst %.c,%,$(strip $(1))) $$^
+	chmod +x $(BUILDDIR)/$(patsubst %.c,%,$(strip $(1)))
 endef
 
 # ----------------------------------------------------------------------------------------
