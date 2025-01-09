@@ -51,9 +51,6 @@ jobs:
       - name: Check dev container, build if needed
         run: .github/scripts/check_devcontainer.sh "${REPO_NAME}" "${IMAGE_NAME}" ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Pull dev container
-        run: docker pull ${IMAGE_NAME}
-
       - name: Run tests (in release config)
         run: |
           docker run --rm \
