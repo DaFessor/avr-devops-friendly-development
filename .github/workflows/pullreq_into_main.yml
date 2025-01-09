@@ -59,11 +59,11 @@ jobs:
           docker run --rm \
             --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
             --mount type=bind,src=$HOME,dst=/root \
-            ${IMAGE_NAME} sh -c "cd /workspaces/native_test;run run_all_tests;"
+            ${IMAGE_NAME} -c "cd /workspaces/native_test;run run_all_tests;"
 
       - name: Build target firmware (in release config)
         run: |
           docker run --rm \
             --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
             --mount type=bind,src=$HOME,dst=/root \
-            ${IMAGE_NAME} sh -c "cd /workspaces/target_firmware;make target_firmware"
+            ${IMAGE_NAME} -c "cd /workspaces/target_firmware;make target_firmware"
