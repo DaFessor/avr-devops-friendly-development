@@ -1,4 +1,4 @@
-FROM alpine:3.20
+FROM alpine:3.21
 
 # Add the necessary extra packages
 RUN apk add --no-cache make git gcc-avr avr-libc avrdude picocom expect build-base ruby ruby-bundler
