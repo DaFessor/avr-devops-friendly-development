@@ -51,6 +51,13 @@ jobs:
       - name: Check dev container, build if needed
         run: .github/scripts/check_devcontainer.sh "${REPO_NAME}" "${IMAGE_NAME}" ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Fetch external dependencies
+        run: |
+          docker run --rm \
+            --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
+            --mount type=bind,src=$HOME,dst=/root \
+            ${IMAGE_NAME} -c "cd /workspaces/external_deps;make"
+
       - name: Run tests (in release config)
         run: |
           docker run --rm \
