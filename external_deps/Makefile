@@ -10,7 +10,9 @@ all: $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock
 $(DEPSROOT)/.installed_unity:
 	@mkdir -p $(DEPSROOT)/unity
 	@cd $(DEPSROOT); \
-	wget -q -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
+	echo "Installing Unity..."; \
+	ls -al; \
+	wget -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
 	unzip unity.zip; \
 	cp -a Unity-2.6.0/* unity; \
 	rm -rf unity.zip Unity-2.6.0; \
