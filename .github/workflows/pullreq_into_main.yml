@@ -24,7 +24,7 @@ jobs:
       - name: Downcase image and repo names (needed if user has uppercase letters in login name)
         run: |
           echo "REPO_NAME=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
-          echo "IMAGE_NAME=ghcr.io/${REPO_NAME}/${IMAGE_BASENAME}:latest" >>${GITHUB_ENV}
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/${IMAGE_BASENAME}:latest" >>${GITHUB_ENV}
 
       - name: List some settings for debug
         run: |
