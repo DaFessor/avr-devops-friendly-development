@@ -53,7 +53,10 @@ jobs:
 
       - name: Run tests (in release config)
         run: |
-          docker run --rm \
+          touch uidtest
+          ls -l uidtest
+          id
+          docker run --rm --user 1001\
             --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
             --mount type=bind,src=$HOME,dst=/root \
             ${IMAGE_NAME} -c "cd /workspaces/native_test;make run_all_tests"
