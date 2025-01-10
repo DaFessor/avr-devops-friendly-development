@@ -12,6 +12,8 @@ $(DEPSROOT)/.installed_unity:
 	echo "Installing Unity..."; \
 	wget -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
 	unzip unity.zip; \
+	ls -al; \
+	echo "Renaming Unity..."; \
 	mv Unity-2.6.0 unity; \
 	[ -f unity/LICENSE.txt ] && touch $@
 

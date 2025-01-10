@@ -37,7 +37,7 @@ jobs:
           echo "IMAGE_NAME: ${IMAGE_NAME}"
           sh -c "echo 'pwd': $(pwd)"
           sh -c "echo '~'  : $HOME"
-          echo "Running as: " $(id)
+          echo "Running as: "$(id)
           echo "RUNNER_ID=$(id | cut -f1 -d' ' | grep -Eo '[0-9]+')" >>${GITHUB_ENV}
 
       - name: Checkout repo
