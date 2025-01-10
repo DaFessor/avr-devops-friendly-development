@@ -27,7 +27,7 @@ jobs:
           echo "REPO_NAME=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
           echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/${IMAGE_BASENAME}:latest" >>${GITHUB_ENV}
 
-      - name: List some settings for debug
+      - name: List some settings for debug and get uid
         run: |
           echo "github.actor: " ${{ github.actor }}
           echo "github.repository: " ${{ github.repository }}
@@ -37,6 +37,8 @@ jobs:
           echo "IMAGE_NAME: ${IMAGE_NAME}"
           sh -c "echo 'pwd': $(pwd)"
           sh -c "echo '~'  : $HOME"
+          echo "Running as: " $(id)
+          echo "RUNNER_ID=$(id | cut -f1 -d' ' | grep -Eo '[0-9]+')" >>${GITHUB_ENV}
 
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -53,14 +55,14 @@ jobs:
 
       - name: Run tests (in release config)
         run: |
-          docker run --rm --user runner \
+          docker run --rm --user ${RUNNER_ID} \
             --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
             --mount type=bind,src=$HOME,dst=/root \
             ${IMAGE_NAME} -c "cd /workspaces/native_test;make run_all_tests"
 
       - name: Build target firmware (in release config)
         run: |
-          docker run --rm --user runner \
+          docker run --rm --user ${RUNNER_ID} \
             --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
             --mount type=bind,src=$HOME,dst=/root \
             ${IMAGE_NAME} -c "cd /workspaces/target_firmware;make target_firmware"
