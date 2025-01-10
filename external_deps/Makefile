@@ -17,9 +17,9 @@ $(DEPSROOT)/.installed_unity:
 
 $(DEPSROOT)/.installed_cmock:
 	@cd $(DEPSROOT); \
-	wget -q -O cmock.zip https://github.com/ThrowTheSwitch/CMock/archive/refs/tags/v2.5.3.zip; \
+	wget -O cmock.zip https://github.com/ThrowTheSwitch/CMock/archive/refs/tags/v2.5.3.zip; \
 	unzip -q cmock.zip; \
-	cp -a CMock-2.5.3/* cmock/; \
+	cp -a CMock-2.5.3/* cmock; \
 	rm -rf cmock.zip CMock-2.5.3; \
 	cd cmock; \
 	bundle install && touch $@
