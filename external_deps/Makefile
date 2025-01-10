@@ -8,19 +8,14 @@ DEPSROOT := $(PROJROOT)/build/deps_
 all: $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock
 
 $(DEPSROOT)/.installed_unity:
-	@mkdir -p $(DEPSROOT)/unity
 	@cd $(DEPSROOT); \
 	echo "Installing Unity..."; \
-	ls -al; \
-	id; \
 	wget -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
 	unzip unity.zip; \
 	mv Unity-2.6.0 unity; \
 	[ -f unity/LICENSE.txt ] && touch $@
 
 $(DEPSROOT)/.installed_cmock:
-	@mkdir -p $(DEPSROOT)/cmock
-	ls -al /
 	@cd $(DEPSROOT); \
 	wget -q -O cmock.zip https://github.com/ThrowTheSwitch/CMock/archive/refs/tags/v2.5.3.zip; \
 	unzip cmock.zip; \
