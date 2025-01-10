@@ -9,19 +9,18 @@ all: $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock
 
 $(DEPSROOT)/.installed_unity:
 	@cd $(DEPSROOT); \
-	echo "Installing Unity..."; \
 	wget -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
-	unzip unity.zip; \
-	ls -al; \
-	echo "Renaming Unity..."; \
-	mv Unity-2.6.0 unity; \
+	unzip -q unity.zip; \
+	cp -a Unity-2.6.0/* unity; \
+	rm -rf unity.zip Unity-2.6.0; \
 	[ -f unity/LICENSE.txt ] && touch $@
 
 $(DEPSROOT)/.installed_cmock:
 	@cd $(DEPSROOT); \
 	wget -q -O cmock.zip https://github.com/ThrowTheSwitch/CMock/archive/refs/tags/v2.5.3.zip; \
-	unzip cmock.zip; \
-	mv CMock-2.5.3 cmock; \
+	unzip -q cmock.zip; \
+	cp -a CMock-2.5.3/* cmock/; \
+	rm -rf cmock.zip CMock-2.5.3; \
 	cd cmock; \
 	bundle install && touch $@
 
