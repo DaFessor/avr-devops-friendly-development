@@ -12,6 +12,7 @@ $(DEPSROOT)/.installed_unity:
 	@cd $(DEPSROOT); \
 	echo "Installing Unity..."; \
 	ls -al; \
+	id; \
 	wget -O unity.zip https://github.com/ThrowTheSwitch/Unity/archive/refs/tags/v2.6.0.zip; \
 	unzip unity.zip; \
 	mv Unity-2.6.0 unity; \
