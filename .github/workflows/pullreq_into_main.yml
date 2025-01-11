@@ -55,7 +55,9 @@ jobs:
 
       - name: Start devcontainer and add a user with an uid that matches the job runner
         run: |
-          echo "DEVCONT_ID=$(docker run --rm -dt --mount type=bind,src=${{ github.workspace }},dst=/workspaces --mount type=bind,src=$HOME,dst=/root ${IMAGE_NAME} -c 'Devcontainer running;sleep infinity')" >>${GITHUB_ENV}
+          DEVCONT_ID=$(docker run --rm -dt --mount type=bind,src=${{ github.workspace }},dst=/workspaces --mount type=bind,src=$HOME,dst=/root ${IMAGE_NAME} -c "Devcontainer running;sleep infinity")
+          echo "${DEVCONT_ID}"
+          echo "DEVCONT_ID=${DEVCONT_ID}" >>${GITHUB_ENV}
           docker exec -u 0 ${DEVCONT_ID} adduser -D -u ${RUNNER_ID} runner
 
       - name: Run tests (in release config)
@@ -69,4 +71,4 @@ jobs:
       - name: Clean up - delete running devcontainer
         if: always()
         run: |
-          docker stop --SIGKILL ${DEVCONT_ID}
+          docker stop --signal SIGKILL ${DEVCONT_ID}
