@@ -1,0 +1,74 @@
+name: 'Make sure all tests run & that fw can be built on pull-req'
+run-name: ${{ github.actor }} initiated a pull request
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+
+env:
+  IMAGE_BASENAME: 'devcont-img'
+
+jobs:
+
+  build_run_tests_and_build_fw:
+    name: Check all builds and tests
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      pages: write
+      id-token: write
+
+    steps:
+      - name: Downcase image and repo names (needed if user has uppercase letters in login name)
+        run: |
+          echo "REPO_NAME=${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+          echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/${IMAGE_BASENAME}:latest" >>${GITHUB_ENV}
+
+      - name: List some settings for debug and get uid
+        run: |
+          echo "github.actor: " ${{ github.actor }}
+          echo "github.repository: " ${{ github.repository }}
+          echo "github.workspace :" ${{ github.workspace }}
+          echo "github.repository_owner :" ${{ github.repository_owner }}
+          echo "REPO_NAME: " ${REPO_NAME}
+          echo "IMAGE_NAME: ${IMAGE_NAME}"
+          sh -c "echo 'pwd': $(pwd)"
+          sh -c "echo '~'  : $HOME"
+          echo "Running as: "$(id)
+          echo "RUNNER_ID=$(id | cut -f1 -d' ' | grep -Eo '[0-9]+')" >>${GITHUB_ENV}
+
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check dev container image, build image if needed
+        run: .github/scripts/check_devcontainer.sh "${REPO_NAME}" "${IMAGE_NAME}" ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start devcontainer and add a user with an uid that matches the job runner
+        run: |
+          DEVCONT_ID=$(docker run --rm -dt --mount type=bind,src=${{ github.workspace }},dst=/workspaces --mount type=bind,src=$HOME,dst=/root ${IMAGE_NAME} -c "Devcontainer running;sleep infinity")
+          echo "Devcontainer id : ${DEVCONT_ID}"
+          echo "DEVCONT_ID=${DEVCONT_ID}" >>${GITHUB_ENV}
+          docker exec -u 0 ${DEVCONT_ID} adduser -D -u ${RUNNER_ID} runner
+
+      - name: Run tests (in release config)
+        run: |
+          docker exec -u ${RUNNER_ID} -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/native_test;make run_all_tests"
+
+      - name: Build target firmware (in release config)
+        run: |
+          docker exec -u ${RUNNER_ID} -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+
+      - name: Clean up - delete running devcontainer
+        if: always()
+        run: |
+          docker stop --signal SIGKILL ${DEVCONT_ID}
