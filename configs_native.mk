@@ -18,5 +18,5 @@ CPPFLAGS += -DDEBUG -O0 -g2
 else ifeq ($(strip $(CONFIG)),)
 $(error No target configuration (must be set to RELEASE or DEBUG, like CONFIG=RELEASE))
 else
-$(error Invalid target configuration $(CONFIG) (must be RELEASE or DEBUG)) 
+$(error Invalid target configuration $(CONFIG) (must be RELEASE or DEBUG))
 endif

@@ -46,7 +46,7 @@ $(DEPSROOT)/.installed_cmock:
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
+	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -fprofile-arcs -ftest-coverage -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
@@ -95,7 +95,7 @@ $(BUILDDIR)/$(patsubst %.c,%,$(strip $(1))): \
 endif
 	cd $(BUILDDIR);\
 	echo "Linking test: $$^";\
-	$(CC) $(LDFLAGS) -o $$(patsubst %.c,%,$(strip $(1))) $$^
+	$(CC) $(LDFLAGS) -lgcov --coverage -o $$(patsubst %.c,%,$(strip $(1))) $$^
 	chmod +x $(BUILDDIR)/$(patsubst %.c,%,$(strip $(1)))
 endef
 
@@ -150,7 +150,11 @@ $(eval $(call TEST_DEFINITION,\
 alltests: $(ALLTESTS)
 
 run_all_tests: native_tests
+	cd $(BUILDDIR); rm -f testreport.txt coveragereport/*
 	@for test in $(ALLTESTS); do \
-		$$test; \
+		$$test | tee -a $(BUILDDIR)/testreport.txt; \
 		printf "\n"; \
 	done
+	cd $(BUILDDIR); \
+	lcov --capture --directory . --exclude "cmock" --exclude unity --output-file coverage.info; \
+	genhtml coverage.info --exclude "math.h" --output-directory coveragereport
