@@ -66,7 +66,7 @@ jobs:
 
       - name: Build target firmware (in release config)
         run: |
-          docker exec -u ${RUNNER_ID} GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
 
       - name: Clean up - delete running devcontainer
         if: always()
