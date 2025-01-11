@@ -50,19 +50,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Check dev container, build if needed
+      - name: Check dev container image, build image if needed
         run: .github/scripts/check_devcontainer.sh "${REPO_NAME}" "${IMAGE_NAME}" ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Start devcontainer and add a user with an uid that matches the job runner
+        run: |
+          echo "DEVCONT_ID=$(docker run --rm -dt \
+            --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
+            --mount type=bind,src=$HOME,dst=/root ${IMAGE_NAME}  \
+            -c 'Devcontainer running;sleep infinity')" >>${GITHUB_ENV}
+           docker exec -u 0 ${DEVCONT_ID} adduser -D -u ${RUNNER_ID} runner
 
       - name: Run tests (in release config)
         run: |
-          docker run --rm --user ${RUNNER_ID} \
-            --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
-            --mount type=bind,src=$HOME,dst=/root \
-            ${IMAGE_NAME} -c "cd /workspaces/native_test;make run_all_tests"
+          docker exec -u ${RUNNER_ID} ${DEVCONT_ID} -c "cd /workspaces/native_test;make run_all_tests"
 
       - name: Build target firmware (in release config)
         run: |
-          docker run --rm --user ${RUNNER_ID} \
-            --mount type=bind,src=${{ github.workspace }},dst=/workspaces \
-            --mount type=bind,src=$HOME,dst=/root \
-            ${IMAGE_NAME} -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} ${DEVCONT_ID} -c "cd /workspaces/target_firmware;make target_firmware"
+
+      - name: Clean up - delete running devcontainer
+        if: always()
+        run: |
+          docker stop --SIGKILL ${DEVCONT_ID}
