@@ -150,11 +150,14 @@ $(eval $(call TEST_DEFINITION,\
 alltests: $(ALLTESTS)
 
 run_all_tests: native_tests
-	cd $(BUILDDIR); rm -f testreport.txt coveragereport/*
+	@cd $(BUILDDIR); rm -rf testreport.txt covdata.txt coveragereport/
 	@for test in $(ALLTESTS); do \
-		$$test | tee -a $(BUILDDIR)/testreport.txt; \
-		printf "\n"; \
+		printf "**** Running test: $$test\n\n" >> $(BUILDDIR)/testreport.txt; \
+		$$test >> $(BUILDDIR)/testreport.txt; \
+		printf "\n\n" >> $(BUILDDIR)/testreport.txt; \
 	done
-	cd $(BUILDDIR); \
-	lcov --capture --directory . --exclude "cmock" --exclude unity --output-file coverage.info; \
-	genhtml coverage.info --exclude "math.h" --output-directory coveragereport
+	@cd $(BUILDDIR); \
+	lcov --capture --directory . --exclude "cmock" --exclude unity --output-file coverage.info &> covdata.txt; \
+	genhtml coverage.info --exclude "math.h" --output-directory coveragereport &> covdata.txt; \
+	tail -n 3 $(BUILDDIR)/covdata.txt >> $(BUILDDIR)/testreport.txt;printf "\n\n"; \
+	printf "\n\n"; cat $(BUILDDIR)/testreport.txt; printf "\n\n"
