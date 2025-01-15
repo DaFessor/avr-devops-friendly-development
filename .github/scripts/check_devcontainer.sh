@@ -30,17 +30,25 @@ echo "Docker hash: ${DOCKER_HASH}"
 
 # Get info on any existing image and try to match hashes
 echo "Rest API url: https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions"
-IMG_HITS=$(curl -s -L -H "Accept: application/vnd.github+json" \
+
+RESPONSE=$(curl -s -L -H "Accept: application/vnd.github+json" \
                    -H "Authorization: Bearer ${GITHUB_TOKEN}" \
                    -H "X-GitHub-Api-Version: 2022-11-28" \
-                   "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions" | grep -c "${DOCKER_HASH}")
+                   "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions")
+
+IMG_HITS=$(echo "${RESPONSE}" | grep -c "${DOCKER_HASH}")
+IMG_ID=$(echo "${RESPONSE}" | grep name | cut -f3 -d: | cut -f1 -d\")
+
 echo "Number of hash matches: ${IMG_HITS}"
+echo "Image ID: ${IMG_ID}"
 
 # If hashes don't (or don exist), build and push image
 if [ "${IMG_HITS}" -lt  1 ]; then
     echo "Rebuilding image, deleting any old stuff ...."
-    docker images -a
-    docker image rm "${IMAGE_PATH}" || true
+    curl -s -L -X DELETE -H "Accept: application/vnd.github+json" \
+        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+       "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions/${IMG_ID}" || true
     echo "Doing the actual build ...."
     docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
     echo "Pushing new image to ${IMAGE_PATH} ...."
