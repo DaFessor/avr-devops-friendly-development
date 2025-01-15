@@ -20,7 +20,8 @@ echo "IMAGE_PATH=${IMAGE_PATH}"
 REPO_NAME_URL_ENC=$(echo "${REPO_NAME}" | cut -f2 -d/)
 IMAGE_NAME=$(echo "${IMAGE_PATH}" | cut -f4 -d/ | cut -f1 -d:)
 REPO_NAME_URL_ENC="${REPO_NAME_URL_ENC}%2F${IMAGE_NAME}"
-IMAGE_PATH_NO_TAG=$(echo "${IMAGE_PATH}" | cut -f1 -d:)
+
+echo "IMAGE_NAME=${IMAGE_NAME}"
 
 # Change to .devcontainer folder and calculate Dockerfile hash
 cd "${GITHUB_WORKSPACE}"/.devcontainer || exit 1
@@ -38,7 +39,7 @@ echo "Number of hash matches: ${IMG_HITS}"
 # If hashes don't (or don exist), build and push image
 if [ "${IMG_HITS}" -lt  1 ]; then
     echo "Rebuilding image, deleting any old stuff ...."
-    docker image rm "${IMAGE_PATH_NO_TAG}" || true
+    docker image rm "${IMAGE_PATH}" || true
     echo "Doing the actual build ...."
     docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
     echo "Pushing new image to ${IMAGE_PATH} ...."
