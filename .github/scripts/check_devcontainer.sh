@@ -39,6 +39,7 @@ echo "Number of hash matches: ${IMG_HITS}"
 # If hashes don't (or don exist), build and push image
 if [ "${IMG_HITS}" -lt  1 ]; then
     echo "Rebuilding image, deleting any old stuff ...."
+    docker images -a
     docker image rm "${IMAGE_PATH}" || true
     echo "Doing the actual build ...."
     docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
