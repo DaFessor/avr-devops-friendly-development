@@ -41,6 +41,7 @@ IMG_ID=$(echo "${RESPONSE}" | grep name | cut -f3 -d: | cut -f1 -d\")
 
 echo "Number of hash matches: ${IMG_HITS}"
 echo "Image ID: ${IMG_ID}"
+echo "Response:\n ${RESPONSE}\n"
 
 # If hashes don't (or don exist), build and push image
 if [ "${IMG_HITS}" -lt  1 ]; then
