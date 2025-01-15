@@ -36,21 +36,25 @@ RESPONSE=$(curl -s -L -H "Accept: application/vnd.github+json" \
                    -H "X-GitHub-Api-Version: 2022-11-28" \
                    "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions")
 
-IMG_HITS=$(echo "${RESPONSE}" | grep -c "${DOCKER_HASH}")
-IMG_ID=$(echo "${RESPONSE}" | grep name | cut -f3 -d: | cut -f1 -d\")
+IMG_COUNT=$(echo "${RESPONSE}" | grep -c name)
+IMG_MATCHES=$(echo "${RESPONSE}" | grep -c "${DOCKER_HASH}")
+IMG_IDS=$(echo "${RESPONSE}" | grep name | cut -f3 -d: | cut -f1 -d\")
 
-echo "Number of hash matches: ${IMG_HITS}"
-echo "Image ID: ${IMG_ID}"
-echo "Response:\n ${RESPONSE}\n"
+echo "Number of images: ${IMG_COUNT}"
+echo "Number of matching images: ${IMG_MATCHES}"
+echo "Image IDs:\n ${IMG_IDS}\n"
 
 # If hashes don't (or don exist), build and push image
-if [ "${IMG_HITS}" -lt  1 ]; then
-    echo "Rebuilding image, deleting any old stuff ...."
-    curl -s -L -X DELETE -H "Accept: application/vnd.github+json" \
-        -H "Authorization: Bearer ${GITHUB_TOKEN}" \
-        -H "X-GitHub-Api-Version: 2022-11-28" \
-       "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions/${IMG_ID}" || true
-    echo "Doing the actual build ...."
+if [ "${IMG_MATCHES}" -lt  1 ]; then
+    echo "No image matches, rebuilding image and deleting any old stuff ...."
+    for image in ${IMG_IDS}; do
+        echo "Deleting image ${image} ...."
+        curl -s -L -X DELETE -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${GITHUB_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions/${image}" || true
+    done
+    echo "Build image ...."
     docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
     echo "Pushing new image to ${IMAGE_PATH} ...."
     docker push "${IMAGE_PATH}"
