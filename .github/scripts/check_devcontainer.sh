@@ -40,13 +40,18 @@ IMG_COUNT=$(echo "${RESPONSE}" | grep -c name)
 IMG_MATCHES=$(echo "${RESPONSE}" | grep -c "${DOCKER_HASH}")
 IMG_IDS=$(echo "${RESPONSE}" | grep \"id\" | cut -f2 -d: | cut -f1 -d,)
 
-echo "Number of images: ${IMG_COUNT}"
+echo "Number of existing images: ${IMG_COUNT}"
 echo "Number of matching images: ${IMG_MATCHES}"
 echo "Image IDs:\n ${IMG_IDS}\n"
 
 # If hashes don't (or don exist), build and push image
 if [ "${IMG_MATCHES}" -lt  1 ]; then
     echo "No image matches, rebuilding image and deleting any old stuff ...."
+    echo "Building image ...."
+    docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
+    echo "Pushing new image to ${IMAGE_PATH} ...."
+    docker push "${IMAGE_PATH}"
+    echo "Deleting old images ...."
     for image in ${IMG_IDS}; do
         echo "Deleting image ${image} ...."
         curl -s -L -X DELETE -H "Accept: application/vnd.github+json" \
@@ -54,10 +59,6 @@ if [ "${IMG_MATCHES}" -lt  1 ]; then
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/user/packages/container/${REPO_NAME_URL_ENC}/versions/${image}" || true
     done
-    echo "Build image ...."
-    docker build -t "${IMAGE_PATH}" --label org.opencontainers.image.description="${DOCKER_HASH}" .
-    echo "Pushing new image to ${IMAGE_PATH} ...."
-    docker push "${IMAGE_PATH}"
 else
     echo "Image ${IMAGE_PATH} up to date, nothing to do ...."
 fi
