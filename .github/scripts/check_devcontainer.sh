@@ -38,7 +38,7 @@ RESPONSE=$(curl -s -L -H "Accept: application/vnd.github+json" \
 
 IMG_COUNT=$(echo "${RESPONSE}" | grep -c name)
 IMG_MATCHES=$(echo "${RESPONSE}" | grep -c "${DOCKER_HASH}")
-IMG_IDS=$(echo "${RESPONSE}" | grep name | cut -f3 -d: | cut -f1 -d\")
+IMG_IDS=$(echo "${RESPONSE}" | grep \"id\" | cut -f2 -d: | cut -f1 -d,)
 
 echo "Number of images: ${IMG_COUNT}"
 echo "Number of matching images: ${IMG_MATCHES}"
