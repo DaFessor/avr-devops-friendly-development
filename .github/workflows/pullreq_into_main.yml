@@ -81,7 +81,7 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           # Upload project pages
-          path: './proj_pages/'
+          path: './project_pages/'
 
       - name: Deploy to GitHub Pages
         uses: actions/deploy-pages@v4
