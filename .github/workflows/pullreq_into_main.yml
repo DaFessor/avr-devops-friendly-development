@@ -67,8 +67,8 @@ jobs:
 
       - name: Build target firmware
         run: |
-          docker exec -u ${RUNNER_ID} -e CONFIG=RELEASE GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
-          docker exec -u ${RUNNER_ID} -e CONFIG=DEBUG GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} -e CONFIG=RELEASE -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} -e CONFIG=DEBUG -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
 
       - name: Update download files and timestamps
         run: |
