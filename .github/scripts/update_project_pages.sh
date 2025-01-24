@@ -12,6 +12,8 @@ REPOSITORY=$(echo "${1}" | tr  '[:upper:]' '[:lower:]' )
 REPO_OWNER=$(echo "${REPOSITORY}" | cut -f1 -d/ )
 REPO_NAME=$(echo "${REPOSITORY}" | cut -f2 -d/ )
 PAGES_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/"
+WORKDIR=$(pwd)
+echo "Working directory: ${WORKDIR}"
 
 echo "Update project pages variables:"
 echo "REPOSITORY = ${REPOSITORY}"
@@ -21,7 +23,7 @@ echo "PAGES_URL = ${PAGES_URL}"
 
 # Update firmware.zip
 rm -f proj_pages/firmware/firmware.zip
-zip proj_pages/firmware/firmware.zip build/target_firmware/release/firmware.*
+zip ./proj_pages/firmware/firmware.zip ./build/target_firmware/release/firmware.*
 
 # Update test_result.xml
 cp -rf build/native_test/testreport/* proj_pages/test_report
