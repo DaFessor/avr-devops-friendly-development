@@ -26,9 +26,9 @@ ls -al .
 echo "List files in the build directory"
 ls -al ./build
 echo "List files in project_pages directory"
-ls -al ./proj_pages
+ls -al ./project_pages
 echo "List files in project_pages/firmware directory"
-ls -al ./proj_pages/firmware
+ls -al ./project_pages/firmware
 
 
 # Update firmware.zip
@@ -40,8 +40,8 @@ cp -rf build/native_test_/debug/testreport/* project_pages/testreport
 
 # Update date stamps
 NOW=$(date)
-sed "s/TTTTTTTTTTTTTT/${NOW}/g" < proj_pages/index.html.template > index_tmp.html
+sed "s/TTTTTTTTTTTTTT/${NOW}/g" < project_pages/index.html.template > index_tmp.html
 sed "s:RRRRRRRRRRRRRR:${REPORAW}:g" < index_tmp.html > index.html
-mv -f index.html proj_pages/index.html
+mv -f index.html project_pages/index.html
 
 exit 0
