@@ -26,7 +26,7 @@ rm -f proj_pages/firmware/firmware.zip
 zip ./proj_pages/firmware/firmware.zip ./build/target_firmware_/release/firmware.*
 
 # Update test_result.xml
-cp -rf build/native_test_/debug/testreport/* proj_pages/test_report
+cp -rf build/native_test_/debug/testreport/* project_pages/testreport
 
 # Update date stamps
 NOW=$(date)
