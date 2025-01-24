@@ -32,8 +32,8 @@ ls -al ./proj_pages/firmware
 
 
 # Update firmware.zip
-rm -f .proj_pages/firmware/firmware.zip
-zip proj_pages/firmware/firmware.zip ./build/target_firmware_/release/firmware.*
+rm -f .project_pages/firmware/firmware.zip
+zip project_pages/firmware/firmware.zip ./build/target_firmware_/release/firmware.*
 
 # Update test_result.xml
 cp -rf build/native_test_/debug/testreport/* project_pages/testreport
