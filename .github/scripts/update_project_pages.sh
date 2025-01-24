@@ -12,24 +12,28 @@ REPOSITORY=$(echo "${1}" | tr  '[:upper:]' '[:lower:]' )
 REPO_OWNER=$(echo "${REPOSITORY}" | cut -f1 -d/ )
 REPO_NAME=$(echo "${REPOSITORY}" | cut -f2 -d/ )
 PAGES_URL="https://${REPO_OWNER}.github.io/${REPO_NAME}/"
+WORKDIR=$(pwd)
+echo "Working directory: ${WORKDIR}"
 
-echo "Update project pages variables:"
+echo "Project pages variables:"
 echo "REPOSITORY = ${REPOSITORY}"
 echo "REPO_OWNER = ${REPO_OWNER}"
 echo "REPO_NAME = ${REPO_NAME}"
 echo "PAGES_URL = ${PAGES_URL}"
 
 # Update firmware.zip
-rm -f proj_pages/firmware/firmware.zip
-zip proj_pages/firmware/firmware.zip build/target_firmware/release/firmware.*
+cd "${WORKDIR}"/build/target_firmware_/release
+zip "${WORKDIR}"/project_pages/firmware/firmware.zip firmware.*
 
-# Update test_result.xml
-cp -rf build/native_test/testreport/* proj_pages/test_report
+# Update test report
+cd "${WORKDIR}/build/native_test_/debug"
+cp -rf testreport/* "${WORKDIR}/project_pages/testreport"
+zip -r "${WORKDIR}/project_pages/testreport/testreport.zip" testreport
 
 # Update date stamps
+cd "${WORKDIR}/project_pages"
 NOW=$(date)
-sed "s/TTTTTTTTTTTTTT/${NOW}/g" < proj_pages/index.html.template > index_tmp.html
+sed "s/TTTTTTTTTTTTTT/${NOW}/g" < index.html.template > index_tmp.html
 sed "s:RRRRRRRRRRRRRR:${REPORAW}:g" < index_tmp.html > index.html
-mv -f index.html proj_pages/index.html
 
 exit 0

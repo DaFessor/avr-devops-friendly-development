@@ -1,4 +1,4 @@
-name: 'Make sure all tests run & that fw can be built on pull-req'
+name: 'Make sure all tests run & that fw can be built on pull request'
 run-name: ${{ github.actor }} initiated a pull request
 
 on:
@@ -60,13 +60,31 @@ jobs:
           echo "DEVCONT_ID=${DEVCONT_ID}" >>${GITHUB_ENV}
           docker exec -u 0 ${DEVCONT_ID} adduser -D -u ${RUNNER_ID} runner
 
-      - name: Run tests (in release config)
+      - name: Run native tests
         run: |
-          docker exec -u ${RUNNER_ID} -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/native_test;make run_all_tests"
+          docker exec -u ${RUNNER_ID} -e CONFIG=DEBUG -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/native_test;make run_all_tests"
+          docker exec -u ${RUNNER_ID} -e CONFIG=RELEASE -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/native_test;make run_all_tests"
 
-      - name: Build target firmware (in release config)
+      - name: Build target firmware
         run: |
-          docker exec -u ${RUNNER_ID} -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} -e CONFIG=RELEASE -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+          docker exec -u ${RUNNER_ID} -e CONFIG=DEBUG -e GEM_HOME="/home/runner" ${DEVCONT_ID} sh -c "cd /workspaces/target_firmware;make target_firmware"
+
+      - name: Update download files and timestamps
+        run: |
+          .github/scripts/update_project_pages.sh "${GITHUB_REPOSITORY}"
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+ 
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # Upload project pages
+          path: './project_pages/'
+
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
 
       - name: Clean up - delete running devcontainer
         if: always()
