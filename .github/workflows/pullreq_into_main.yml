@@ -72,7 +72,7 @@ jobs:
 
       - name: Update download files and timestamps
         run: |
-          docker exec -u ${RUNNER_ID} sh -c "cd /workspaces;.github/scripts//update_project_pages.sh ${GITHUB_REPOSITORY}"
+          docker exec -u ${RUNNER_ID} ${DEVCONT_ID} sh -c "cd /workspaces;.github/scripts//update_project_pages.sh ${GITHUB_REPOSITORY}"
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
