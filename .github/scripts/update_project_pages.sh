@@ -23,10 +23,10 @@ echo "PAGES_URL = ${PAGES_URL}"
 
 # Update firmware.zip
 rm -f proj_pages/firmware/firmware.zip
-zip ./proj_pages/firmware/firmware.zip ./build/target_firmware/release/firmware.*
+zip ./proj_pages/firmware/firmware.zip ./build/target_firmware_/release/firmware.*
 
 # Update test_result.xml
-cp -rf build/native_test/testreport/* proj_pages/test_report
+cp -rf build/native_test_/debug/testreport/* proj_pages/test_report
 
 # Update date stamps
 NOW=$(date)
