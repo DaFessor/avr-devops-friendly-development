@@ -1,4 +1,4 @@
-name: 'Make sure all tests run & that fw can be built on pull-req'
+name: 'Make sure all tests run & that fw can be built on pull request'
 run-name: ${{ github.actor }} initiated a pull request
 
 on:

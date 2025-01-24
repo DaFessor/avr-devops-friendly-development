@@ -111,7 +111,7 @@ endef
 #
 # Note 1: The name of the executable will be the same as the name of the test file minus
 #         the .c extension. So if the unit test file is called test1.c, the executable will
-#		  be called test1
+#		  be called test1.
 #
 # Note 2: If there are more than two files to be tested or mocked they are separated
 #         by SPACES, NOT commas.
