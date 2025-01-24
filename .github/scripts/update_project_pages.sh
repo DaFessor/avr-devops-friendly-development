@@ -21,28 +21,19 @@ echo "REPO_OWNER = ${REPO_OWNER}"
 echo "REPO_NAME = ${REPO_NAME}"
 echo "PAGES_URL = ${PAGES_URL}"
 
-echo "List files in the current directory"
-ls -al .
-echo "List files in the build directory"
-ls -al ./build
-echo "List files in project_pages directory"
-ls -al ./project_pages
-echo "List files in project_pages/firmware directory"
-ls -al ./project_pages/firmware
-
-
 # Update firmware.zip
-cd ./build/target_firmware_/release
+cd "${WORKDIR}"/build/target_firmware_/release
 zip "${WORKDIR}"/project_pages/firmware/firmware.zip firmware.*
 
 # Update test report
-cp -rf build/native_test_/debug/testreport/* project_pages/testreport
-zip -r project_pages/testreport/testreport.zip build/native_test_/debug/testreport
+cd "${WORKDIR}/build/native_test_/debug"
+cp -rf testreport/* "${WORKDIR}/project_pages/testreport"
+zip -r "${WORKDIR}/project_pages/testreport/testreport.zip" testreport
 
 # Update date stamps
+cd "${WORKDIR}/project_pages"
 NOW=$(date)
-sed "s/TTTTTTTTTTTTTT/${NOW}/g" < project_pages/index.html.template > index_tmp.html
+sed "s/TTTTTTTTTTTTTT/${NOW}/g" < index.html.template > index_tmp.html
 sed "s:RRRRRRRRRRRRRR:${REPORAW}:g" < index_tmp.html > index.html
-mv -f index.html project_pages/index.html
 
 exit 0
