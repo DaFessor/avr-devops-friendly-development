@@ -1,4 +1,4 @@
-<p><img alt="Project logo" src="images/proj_logo.png" style="height:450px; width:219px"/></p>
+<p><img alt="Project logo" src="images/proj_logo.jpg"></p>
 
 <h1>Project pages for RRRRRRRRRRRRRR</h1>
 
@@ -12,4 +12,5 @@
 
 
 <h2>Test report</h2>
-<p><a href="testreport/index.html">"Latest test/coverage report"</a></p>
+<p><a href="testreport/index.html">View latest test/coverage report</a></p>
+<p><a href="testreport/testreport.zip">Download latest test/coverage report (zip file)</a></p>

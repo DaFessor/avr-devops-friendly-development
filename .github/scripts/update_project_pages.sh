@@ -32,11 +32,12 @@ ls -al ./project_pages/firmware
 
 
 # Update firmware.zip
-rm -f .project_pages/firmware/firmware.zip
-zip project_pages/firmware/firmware.zip ./build/target_firmware_/release/firmware.*
+cd ./build/target_firmware_/release
+zip "${WORKDIR}"/project_pages/firmware/firmware.zip firmware.*
 
-# Update test_result.xml
+# Update test report
 cp -rf build/native_test_/debug/testreport/* project_pages/testreport
+zip -r project_pages/testreport/testreport.zip build/native_test_/debug/testreport
 
 # Update date stamps
 NOW=$(date)
