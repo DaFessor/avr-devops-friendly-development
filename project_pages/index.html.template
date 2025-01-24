@@ -1,0 +1,16 @@
+<p><img alt="Project logo" src="images/proj_logo.jpg"></p>
+
+<h1>Project pages for RRRRRRRRRRRRRR</h1>
+
+<p>This is the GitHub Pages site for the RRRRRRRRRRRRRR project repository.</p>
+<p><a href="https://github.com/RRRRRRRRRRRRRR">Click here to get back to the RRRRRRRRRRRRRR repository</a></p>
+<p>(This page was last updated TTTTTTTTTTTTTT)</p>
+
+
+<h2>Firmware download</h2>
+<p><a href="firmware/firmware.zip">Latest release firmware (zip file)</a></p>
+
+
+<h2>Test report</h2>
+<p><a href="testreport/index.html">View latest test/coverage report</a></p>
+<p><a href="testreport/testreport.zip">Download latest test/coverage report (zip file)</a></p>

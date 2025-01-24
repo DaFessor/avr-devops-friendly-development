@@ -111,7 +111,7 @@ endef
 #
 # Note 1: The name of the executable will be the same as the name of the test file minus
 #         the .c extension. So if the unit test file is called test1.c, the executable will
-#		  be called test1
+#		  be called test1.
 #
 # Note 2: If there are more than two files to be tested or mocked they are separated
 #         by SPACES, NOT commas.
@@ -150,7 +150,7 @@ $(eval $(call TEST_DEFINITION,\
 alltests: $(ALLTESTS)
 
 run_all_tests: native_tests
-	@cd $(BUILDDIR); rm -rf testreport.txt covdata.txt coveragereport/
+	@cd $(BUILDDIR); rm -rf testreport.txt covdata.txt testreport/
 	@for test in $(ALLTESTS); do \
 		printf "**** Running test: $$test\n\n" >> $(BUILDDIR)/testreport.txt; \
 		$$test >> $(BUILDDIR)/testreport.txt; \
@@ -158,6 +158,6 @@ run_all_tests: native_tests
 	done
 	@cd $(BUILDDIR); \
 	lcov --capture --directory . --exclude "cmock" --exclude unity --output-file coverage.info &> covdata.txt; \
-	genhtml coverage.info --exclude "math.h" --output-directory coveragereport &> covdata.txt; \
+	genhtml coverage.info --exclude "math.h" --output-directory testreport &> covdata.txt; \
 	tail -n 3 $(BUILDDIR)/covdata.txt >> $(BUILDDIR)/testreport.txt;printf "\n\n"; \
 	printf "\n\n"; cat $(BUILDDIR)/testreport.txt; printf "\n\n"
