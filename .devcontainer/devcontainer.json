@@ -1,11 +1,14 @@
 // For format details, see https://aka.ms/devcontainer.json
 {
-	"name": "iot",
+	"name": "Avr devconatiner",
 	"build": {
-		"dockerfile": "Dockerfile",
+		"dockerfile": "Dockerfile"
 	},
+	"runArgs": [
+		"--device-cgroup-rule=c 166:* rmw"
+	],
 	"mounts": [
-		"type=bind,source=/dev,target=/dev/host"
+		"type=bind,source=/dev,target=/dev"
 	],
 	"containerEnv": {
 		"GEM_HOME": "/home/devuser/.gem"

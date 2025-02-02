@@ -46,7 +46,7 @@ $(DEPSROOT)/.installed_cmock:
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -fprofile-arcs -ftest-coverage -o $@ $<
+	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) --coverage -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
