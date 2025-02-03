@@ -110,3 +110,13 @@ In normal WSL/bash
 Note for autoattach to work the command needs to run continuously!!
 Windows app https://gitlab.com/alelec/wsl-usb-gui/-/releases works nicely, but it's a bit heavy handed to have this running for autoattach?
 
+
+## Todo
+
+Create idempotent one-time initial setup script
+
+- Check root permissions
+- apt-get install hwdata
+- Create /etc/wsl.conf
+- Check usbipd.exe has been installed
+- Check group memberships (possibly adding user as needed) of dialout plugdev
