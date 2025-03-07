@@ -23,7 +23,9 @@
 				"bitwisecook.tcl",
 				"spmeesseman.vscode-taskexplorer",
 				"augustocdias.tasks-shell-input",
-				"github.vscode-github-actions"
+				"github.vscode-github-actions",
+				"donjayamanne.githistory",
+				"mhutchie.git-graph"
 			]
 		}
 	},
