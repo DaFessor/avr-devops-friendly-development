@@ -1,23 +1,18 @@
 #!/usr/bin/expect -f
 
 set script_name [ file tail [ file normalize [ info script ] ] ]
-if {$argc != 2} {
-    puts "Usage: expect $script_name <regexp to use for stop pattern> <output file>"
-    exit 1
-}
+set project_path [ file dirname [ file dirname [ file normalize [ info script ] ] ] ]
 
-try {
-    set tty_dev /dev/host/[exec ls -l /dev/host/ttyFLASH | grep -o "/dev/tty.*" | cut -d/ -f3]
-    set status 0
-} trap CHILDSTATUS {results options} {
-    puts "*** Error: no flashable device found ***"
+if {$argc != 3} {
+    puts "Usage: expect $script_name <tty device> <regexp to use for stop pattern> <output file>"
     exit 1
 }
 
 set project_path [ file dirname [ file dirname [ file normalize [ info script ] ] ] ]
 
-set stop_pattern [lindex $argv 0]
-set output_file [lindex $argv 1]
+set tty_dev [lindex $argv 0]
+set stop_pattern [lindex $argv 1]
+set output_file [lindex $argv 2]
 
 set fd [open $output_file w]
 fconfigure $fd -buffersize 4000

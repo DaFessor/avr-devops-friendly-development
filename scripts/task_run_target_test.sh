@@ -12,6 +12,13 @@ if [ ! -f ${1} ]; then
     exit 1
 fi
 
+TTYDEV="$(ls -l /dev/tty* | grep 166 | rev | cut -d' ' -f1| rev)"
+if [ ! -c "${TTYDEV}" ]; then
+    echo "*** Error: No flashable device found in /dev/tty* ***"
+    echo "You need to install/run usbipd on your computer and run usbip bind/attach on the device."
+    exit 0
+fi
+
 if echo "${1}" | grep -q release; then
     RUNDIR="${PROJ_DIR}/build/target_test_/release"
 else
@@ -25,6 +32,6 @@ ${PROJ_DIR}/scripts/util_run_avrdude.sh ${1}
 
 printf "\n*** To terminate logging from target press ctrl-a ctrl-x ***\n\n"
 
-${PROJ_DIR}/scripts/util_serial_monitor.tcl "(?w)^(OK|FAIL)$" ${LOGFILE}
+${PROJ_DIR}/scripts/util_serial_monitor.tcl ${TTYDEV} "(?w)^(OK|FAIL)$" ${LOGFILE}
 
 printf "\n*** Logfile with test results saved in ${LOGFILE} ***\n\n"

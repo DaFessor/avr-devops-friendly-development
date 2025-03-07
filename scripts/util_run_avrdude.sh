@@ -12,13 +12,11 @@ if [ ! -f "${1}" ]; then
     exit 1
 fi
 
-TTYDEV="/dev/host/$(ls -l /dev/host/ttyFLASH | grep -o "/dev/tty.*" | cut -d'/' -f3)"
+TTYDEV="$(ls -l /dev/tty* | grep 166 | rev | cut -d' ' -f1| rev)"
 
 if [ ! -c "${TTYDEV}" ]; then
-    echo "*** Error: No flashable device found in /dev/host ***"
-    echo "You need to install/run usbipd on your computer, and you must also run scripts/reset_usb.sh in"
-    echo "an ordinary WSL shell (such as bash) outside this container before you can flash your firmware"
-    echo "from inside the container."
+    echo "*** Error: No flashable device found in /dev/tty* ***"
+    echo "You need to install/run usbipd on your computer and run usbip bind/attach on the device."
     exit 0
 fi
 

@@ -1,27 +1,5 @@
 # Todos
 
-1. Add CI pipeline support
-    - Look at iot demo
-    - Add scripts
-1. Split/cleanup script folder
-    - Tasks
-    - Pipeline scripts
-    - Utils, other wrappers
-1. Unify VsCode tasks to use scripts
-1. Update metafiles
-1. Add comments in relevant files
-    - Scripts
-    - Makefiles
-1. Add a few how-to's and guides somewhere
-    - Start/stop serial monitor
-    - Project layout
-    - Using usb override config
-    - Bootstrapping project
-        - Checkout locally
-        - Open in VSCode
-        - Enable usb
-1. Make C++ support switchable
-
 ## Completed
 
 ## Parked
