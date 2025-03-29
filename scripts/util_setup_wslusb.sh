@@ -59,14 +59,12 @@ systemd = true
 # Automatically mount Windows drive when the distribution is launched
 [automount]
 enabled = true
- 
-
 
 [interop]
 enabled = true
 appendWindowsPath = true
+
 EOF
-    echo "${WSLCONF_FILE} file created"
 else
     echo "ok, ${WSLCONF_FILE} file already exists"
 fi
