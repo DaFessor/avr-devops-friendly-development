@@ -1,0 +1,3 @@
+Check native compile flags.
+Check plug/unplug
+Check Docker/container creation arguments
