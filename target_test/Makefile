@@ -20,11 +20,12 @@ include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
 CMOCK_DIR   := $(DEPSROOT)/cmock
+FFF_DIR     := $(DEPSROOT)/fff
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(PROD_SRCDIR) -I$(BUILDDIR)
+INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
+vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(BUILDDIR)
 vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 
@@ -34,12 +35,17 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
+target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff alltests
+
 init: $(BUILDROOT)/release $(BUILDROOT)/debug
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(DEPSROOT)/.installed_cmock:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(BUILDDIR)/%.o: %.c
@@ -64,7 +70,6 @@ $(BUILDDIR)/%_runner.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
-
 
 $(BUILDDIR)/mocks/Mock%.o: %.h
 	cd $(BUILDDIR); \
@@ -129,14 +134,9 @@ $(eval $(call TEST_DEFINITION, test_mul_op.c, serial_com.c mul_op.c))
 
 # ================== Define all tests ABOVE this line ==================
 
-target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(ALLTESTS)
+alltests: $(ALLTESTS)
+
+target_tests: alltests
 	@printf "\n\n********* There are $$(ls $(BUILDDIR)/*.hex | wc -w) flashable target test(s) in $(CONFIG_LOWER) config *********\n"
 	@avr-size $(BUILDDIR)/*.elf | sed "s/elf/hex/"
 	@printf "\n\n"
-
-#run_native_tests: target_tests.hex
-#	@for test in $(ALLTESTS); do \
-#		printf ">>>>>>>>> Start test: $$(basename $${test})\n"; \
-#		$$test; \
-#		printf "<<<<<<<<< End test: $$(basename $${test})\n\n\n"; \
-#	done
