@@ -24,7 +24,9 @@
                 "${workspaceFolder}/../build/deps_/cmock/src",
                 "${workspaceFolder}/../build/deps_/fff/**",
                 "${workspaceFolder}/../build/native_test_/release/**",
-                "${workspaceFolder}/../build/native_test_/debug/**"
+                "${workspaceFolder}/../build/native_test_/debug/**",
+                "${workspaceFolder}/../build/native_test_/release/mocks/**",
+                "${workspaceFolder}/../build/native_test_/debug/mocks/**"
             ]
         }
     ],

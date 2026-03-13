@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "1: Build target tests (release)",
+            "label": "1: Build all target tests (release)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -15,7 +15,7 @@
             }
         },
         {
-            "label": "2: Build target tests (debug)",
+            "label": "2: Build all target tests (debug)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -26,15 +26,12 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
-            "label": "3: Run target tests (release)",
+            "label": "3: Run selected target tests (release)",
             "dependsOn": [
-                "1: Build target tests (release)"
+                "1: Build all target tests (release)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
@@ -60,15 +57,12 @@
                 "revealProblems": "onProblem",
                 "clear": true,
                 "panel": "dedicated"
-            },
-            "group": {
-                "kind": "test"
             }
         },
         {
-            "label": "4: Run target tests (debug)",
+            "label": "4: Run selected target tests (debug)",
             "dependsOn": [
-                "2: Build target tests (debug)"
+                "2: Build all target tests (debug)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
@@ -94,9 +88,6 @@
                 "revealProblems": "onProblem",
                 "clear": true,
                 "panel": "dedicated"
-            },
-            "group": {
-                "kind": "test"
             }
         },
         {
@@ -118,10 +109,6 @@
             "problemMatcher": [
                 "$gcc"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
             "hide": true
         },
     ],

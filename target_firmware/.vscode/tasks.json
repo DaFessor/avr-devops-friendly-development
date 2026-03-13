@@ -12,9 +12,6 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
@@ -29,9 +26,6 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
@@ -107,6 +101,19 @@
             "presentation": {
                 "reveal": "always"
             }
+        },
+        {
+            "label": "6: Compile current file",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && make compile ${file}",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "hide": true
         },
     ]
 }
