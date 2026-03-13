@@ -6,7 +6,7 @@
             "command": "make",
             "type": "shell",
             "args": [
-                "target_fw"
+                "target_firmware"
             ],
             "problemMatcher": [],
             "presentation": {
@@ -22,7 +22,7 @@
             "command": "make",
             "type": "shell",
             "args": [
-                "target_fw",
+                "target_firmware",
                 "CONFIG=DEBUG"
             ],
             "problemMatcher": [],
@@ -42,7 +42,7 @@
             "command": "${workspaceFolder}/../scripts/task_run_target_firmw.sh",
             "type": "shell",
             "args": [
-                "${workspaceFolder}/../build/target_fw_/release/fw.hex"
+                "${workspaceFolder}/../build/target_firmware_/release/firmware.hex"
             ],
             "problemMatcher": {
                 "owner": "batch",
@@ -73,7 +73,7 @@
             "command": "${workspaceFolder}/../scripts/task_run_target_firmw.sh",
             "type": "shell",
             "args": [
-                "${workspaceFolder}/../build/target_fw_/debug/fw.hex"
+                "${workspaceFolder}/../build/target_firmware_/debug/firmware.hex"
             ],
             "problemMatcher": {
                 "owner": "batch",
