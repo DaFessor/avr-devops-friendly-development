@@ -19,8 +19,10 @@
             "includePath": [
                 "${workspaceFolder}/src",
                 "${workspaceFolder}/../target_firmware/src",
+                "${workspaceFolder}/../target_test/src",
                 "${workspaceFolder}/../build/deps_/unity/src",
                 "${workspaceFolder}/../build/deps_/cmock/src",
+                "${workspaceFolder}/../build/deps_/fff/**",
                 "${workspaceFolder}/../build/native_test_/release/**",
                 "${workspaceFolder}/../build/native_test_/debug/**"
             ]
