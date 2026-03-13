@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "2.1 - Build target firmware in release config",
+            "label": "1: Build target fw (release)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -12,13 +12,10 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
-            "label": "2.2 - Build target firmware in debug config",
+            "label": "2: Build target fw (debug)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -29,15 +26,12 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
-            "label": "2.3 - Run target in release config",
+            "label": "3: Run target fw (release)",
             "dependsOn": [
-                "2.1 - Build target firmware in release config"
+                "1: Build target fw (release)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_firmw.sh",
             "type": "shell",
@@ -66,9 +60,9 @@
             }
         },
         {
-            "label": "2.4 - Run target firmware in debug config",
+            "label": "4: Run target fw (debug)",
             "dependsOn": [
-                "2.2 - Build target firmware in debug config"
+                "2: Build target fw (debug)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_firmw.sh",
             "type": "shell",
@@ -97,7 +91,7 @@
             },
         },
         {
-            "label": "2.5 - Clean target firmware",
+            "label": "5: Clean target fw",
             "command": "make",
             "type": "shell",
             "args": [
@@ -107,6 +101,19 @@
             "presentation": {
                 "reveal": "always"
             }
+        },
+        {
+            "label": "6: Compile current file",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && make compile ${file}",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "hide": true
         },
     ]
 }

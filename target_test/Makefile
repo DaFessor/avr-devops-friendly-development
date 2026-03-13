@@ -11,6 +11,7 @@ BUILDROOT := $(PROJROOT)/build/target_test_
 CONFIG_LOWER := $(shell echo $(CONFIG) | tr A-Z a-z)
 BUILDDIR := $(BUILDROOT)/$(CONFIG_LOWER)
 DEPSROOT := $(PROJROOT)/build/deps_
+WORKSPACE := $(PROJROOT)/target_test
 
 .PHONY: all clean target_tests
 all: target_tests
@@ -20,11 +21,12 @@ include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
 CMOCK_DIR   := $(DEPSROOT)/cmock
+FFF_DIR     := $(DEPSROOT)/fff
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(PROD_SRCDIR) -I$(BUILDDIR)
+INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
+vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(BUILDDIR)
 vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 
@@ -34,12 +36,17 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
+target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff alltests
+
 init: $(BUILDROOT)/release $(BUILDROOT)/debug
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(DEPSROOT)/.installed_cmock:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(BUILDDIR)/%.o: %.c
@@ -64,7 +71,6 @@ $(BUILDDIR)/%_runner.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
-
 
 $(BUILDDIR)/mocks/Mock%.o: %.h
 	cd $(BUILDDIR); \
@@ -91,52 +97,13 @@ $(BUILDDIR)/$(patsubst %.c,%.hex,$(strip $(1))): \
 	/usr/bin/avr-size $(BUILDFILE).elf
 endef
 
-# ----------------------------------------------------------------------------------------
-# To add a test, just call the TEST_DEFINITION macro with the names of the files
-# that are used by the test. The general format is:
-#
-#$(eval $(call TEST_DEFINITION,<test_file>,<files_to_test>,<files_to_mock>))
-#                               ^           ^               ^
-#                               |           |               +-- This part is optional
-#                               |           +------------------ Files to be tested, also optional
-#                               +------------------------------ A single file w. unit tests
-#
-# Note 1: The name of the executable will be the same as the name of the test file minus
-#         the .c extension. So if the unit test file is called test1.c, the executable will
-#		  be called test1
-#
-# Note 2: If there are more than two files to be tested or mocked they are separated
-#         by SPACES, NOT commas.
-#
-# Note 3: There must always be a single test file, but there can be zero or more files to
-#         be tested or mocked. If there are no files to be tested or mocked, the corresponding
-#         argument must be an empty string (absent). Just remember to leave the commas in so
-#         that there's always 3 arguments to the TEST_DEFINITION macro (see examples below).
-#
-# Examples:
-#$(eval $(call TEST_DEFINITION, test1.c,,))                   // No files to test or mock
-#$(eval $(call TEST_DEFINITION, test2.c, funcuser.c func.c,)) // Two files to test, no mocks
-#$(eval $(call TEST_DEFINITION, test3.c ,funcuser.c, func.h)) // One file to test, one mock
-#
-# Any mocks are create in a subfolder called mocks (inside in the build folder). You can
-# add as many tests as you want, each with as many files (and mocks) as you want.
-# ----------------------------------------------------------------------------------------
+# Load the test definitions from the test_list.mk file,
+# which calls the TEST_DEFINITION macro for each test
+include $(WORKSPACE)/test_list.mk
 
-# ================== Define all tests BELOW this line ==================
+alltests: $(ALLTESTS)
 
-$(eval $(call TEST_DEFINITION, test_add_op.c, serial_com.c add_op.c))
-$(eval $(call TEST_DEFINITION, test_mul_op.c, serial_com.c mul_op.c))
-
-# ================== Define all tests ABOVE this line ==================
-
-target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(ALLTESTS)
+target_tests: alltests
 	@printf "\n\n********* There are $$(ls $(BUILDDIR)/*.hex | wc -w) flashable target test(s) in $(CONFIG_LOWER) config *********\n"
 	@avr-size $(BUILDDIR)/*.elf | sed "s/elf/hex/"
 	@printf "\n\n"
-
-#run_native_tests: target_tests.hex
-#	@for test in $(ALLTESTS); do \
-#		printf ">>>>>>>>> Start test: $$(basename $${test})\n"; \
-#		$$test; \
-#		printf "<<<<<<<<< End test: $$(basename $${test})\n\n\n"; \
-#	done

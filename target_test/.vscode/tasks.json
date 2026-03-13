@@ -2,7 +2,7 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "3.1 - Build target tests in release config",
+            "label": "1: Build all target tests (release)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -12,13 +12,10 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
-            "label": "3.2 - Build target tests in debug config",
+            "label": "2: Build all target tests (debug)",
             "command": "make",
             "type": "shell",
             "args": [
@@ -29,15 +26,12 @@
             "presentation": {
                 "reveal": "always",
                 "clear": true
-            },
-            "group": {
-                "kind": "build"
             }
         },
         {
-            "label": "3.3 - Run target tests in release config",
+            "label": "3: Run selected target tests (release)",
             "dependsOn": [
-                "3.1 - Build target tests in release config"
+                "1: Build all target tests (release)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
@@ -63,15 +57,12 @@
                 "revealProblems": "onProblem",
                 "clear": true,
                 "panel": "dedicated"
-            },
-            "group": {
-                "kind": "test"
             }
         },
         {
-            "label": "3.4 - Run target tests in debug config",
+            "label": "4: Run selected target tests (debug)",
             "dependsOn": [
-                "3.2 - Build target tests in debug config"
+                "2: Build all target tests (debug)"
             ],
             "command": "${workspaceFolder}/../scripts/task_run_target_test.sh",
             "type": "shell",
@@ -97,13 +88,10 @@
                 "revealProblems": "onProblem",
                 "clear": true,
                 "panel": "dedicated"
-            },
-            "group": {
-                "kind": "test"
             }
         },
         {
-            "label": "3.5 - Clean target tests",
+            "label": "5: Clean target tests",
             "command": "make",
             "type": "shell",
             "args": [
@@ -113,6 +101,15 @@
             "presentation": {
                 "reveal": "always"
             }
+        },
+        {
+            "label": "6: Compile current file",
+            "type": "shell",
+            "command": "cd ${workspaceFolder} && make compile ${file}",
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "hide": true
         },
     ],
     "inputs": [
