@@ -20,15 +20,14 @@ include $(PROJROOT)/configs_target.mk
 include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
-CMOCK_DIR   := $(DEPSROOT)/cmock
 FFF_DIR     := $(DEPSROOT)/fff
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(BUILDDIR)
+INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(BUILDDIR)
-vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
-vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
+vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(FFF_DIR) $(BUILDDIR)
+vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(BUILDDIR)
+vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(BUILDDIR)
 
 $(BUILDROOT)/release:
 	mkdir -p $(BUILDROOT)/release
@@ -36,14 +35,11 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
-target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff alltests
+target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_fff alltests
 
 init: $(BUILDROOT)/release $(BUILDROOT)/debug
 
 $(DEPSROOT)/.installed_unity:
-	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
-
-$(DEPSROOT)/.installed_cmock:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(DEPSROOT)/.installed_fff:
@@ -71,12 +67,6 @@ $(BUILDDIR)/%_runner.o: %.c
 	cd $(BUILDDIR); \
 	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
 	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
-
-$(BUILDDIR)/mocks/Mock%.o: %.h
-	cd $(BUILDDIR); \
-	$(PROJROOT)/scripts/make_cmock_runner.sh $^; \
-	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@)
 
 # This looks (extra) complicated, but it's just a way to define what is effectively a macro
 # to generate a rule for each test. The macro is called TEST_DEFINITION and it takes two
