@@ -1,7 +1,7 @@
 # Made4DevOps
 **M**odern **A**rduino **D**velopment **E**nvironment for **DevOps**
 
-[Click here to get latest firmware version and see test coverage report](https://dafessor.github.io/avr-devops-friendly-development)
+[Click here to get latest firmware version and see test coverage report](https://dafessor.github.io/made4devops/)
 
 **Note/todo:** *the parts that are currently missing for this document is instructions for configuring usb.*
 
