@@ -17,11 +17,12 @@ all: target_firmware
 include $(PROJROOT)/configs_target.mk
 include $(wildcard $(BUILDDIR)/*.dep)
 
+VIALIB_DIR := $(DEPSROOT)/via
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(PROD_SRCDIR) -I$(BUILDDIR)
+INCLUDEDIRS := -I$(PROD_SRCDIR) -I$(VIALIB_DIR) -I$(BUILDDIR)
 
-vpath %.h $(PROD_SRCDIR)
-vpath %.c $(PROD_SRCDIR)
+vpath %.h $(PROD_SRCDIR) $(VIALIB_DIR) $(BUILDDIR)
+vpath %.c $(PROD_SRCDIR) $(VIALIB_DIR)/driver $(VIALIB_DIR)/Util $(BUILDDIR)
 
 SRCS := $(wildcard $(PROD_SRCDIR)/*.c)
 OBJS := $(patsubst $(PROD_SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))

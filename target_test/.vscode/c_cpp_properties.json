@@ -16,6 +16,7 @@
                 "${workspaceFolder}/../build/deps_/unity/src/**",
                 "${workspaceFolder}/../build/deps_/fff/**",
                 "${workspaceFolder}/../build/deps_/cmock/src/**",
+                "${workspaceFolder}/../build/deps_/via/**",
                 "${workspaceFolder}/../build/target_test_/release/**",
                 "${workspaceFolder}/../build/target_test_/debug/**"
             ],

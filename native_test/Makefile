@@ -21,13 +21,21 @@ include $(wildcard $(BUILDDIR)/*.dep)
 UNITY_DIR   := $(DEPSROOT)/unity
 CMOCK_DIR   := $(DEPSROOT)/cmock
 FFF_DIR     := $(DEPSROOT)/fff
+VIALIB_DIR := $(DEPSROOT)/via
+
 TEST_SRCDIR := $(PROJROOT)/native_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS :=  -I$(UNITY_DIR)/src -I$(CMOCK_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(TEST_SRCDIR) -I$(BUILDDIR)
+INCLUDEDIRS := -I$(UNITY_DIR)/src \
+				-I$(CMOCK_DIR)/src \
+				-I$(FFF_DIR) \
+				-I$(PROD_SRCDIR) \
+				-I$(TEST_SRCDIR) \
+				-I$(VIALIB_DIR) \
+				-I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(BUILDDIR)
-vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
-vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
+vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(VIALIB_DIR) $(BUILDDIR)
+vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(VIALIB_DIR) $(BUILDDIR)
+vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(VIALIB_DIR) $(BUILDDIR)
 
 native_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff alltests
 
@@ -37,7 +45,11 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
-init: $(BUILDROOT)/release $(BUILDROOT)/debug
+init: $(BUILDROOT)/release $(BUILDROOT)/debug \
+	$(DEPSROOT)/.installed_unity \
+	$(DEPSROOT)/.installed_fff \
+	$(DEPSROOT)/.installed_cmock \
+	$(DEPSROOT)/.installed_vialibs
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
@@ -47,6 +59,10 @@ $(DEPSROOT)/.installed_cmock:
 
 $(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_vialibs:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
