@@ -5,11 +5,16 @@ DEPSROOT := $(PROJROOT)/build/deps_
 
 .PHONY: all
 
-all: $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff
+all: $(DEPSROOT)/.installed_unity \
+	$(DEPSROOT)/.installed_cmock \
+	$(DEPSROOT)/.installed_fff \
+	$(DEPSROOT)/.installed_vialibs
+
 
 UNITY_VER=2.6.1
 CMOCK_VER=2.6.0
 FFF_VER=1.1
+SEP4LIB_VER=S2026-1
 
 $(DEPSROOT)/.installed_unity:
 	@cd $(DEPSROOT); \
@@ -34,8 +39,20 @@ $(DEPSROOT)/.installed_fff:
 	wget -O fff/fff.h https://github.com/meekrosoft/fff/releases/download/v$(FFF_VER)/fff.h; \
 	[ -f fff/fff.h ] && touch $@
 
+$(DEPSROOT)/.installed_vialibs:
+	@cd $(DEPSROOT); \
+	wget -O sep4lib.zip https://github.com/erlvia/SEP4_API/archive/refs/tags/$(SEP4LIB_VER).zip; \
+	unzip -q sep4lib.zip; \
+	mkdir -p via/sep4lib; \
+	cp -a SEP4_API-$(SEP4LIB_VER)/lib/* via/sep4lib; \
+	rm -rf sep4lib.zip SEP4_API-$(SEP4LIB_VER); \
+	[ -d via/sep4lib ] && touch $@
+
 clean:
-	@rm -rf $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff
+	@rm -rf $(DEPSROOT)/.installed_unity \
+		$(DEPSROOT)/.installed_cmock \
+		$(DEPSROOT)/.installed_fff \
+		$(DEPSROOT)/.installed_vialibs
 	@rm -rf $(DEPSROOT)/*.zip Unity-$(UNITY_VER)/ CMock-$(CMOCK_VER)/
 	@find $(DEPSROOT)/unity -type d -mindepth 1 | xargs rm -rf
 	@find $(DEPSROOT)/unity -type f | grep -v ".gitemptyfolder" | xargs rm -rf
@@ -43,3 +60,5 @@ clean:
 	@find $(DEPSROOT)/cmock -type f | grep -v ".gitemptyfolder" | xargs rm -rf
 	@find $(DEPSROOT)/fff -type d -mindepth 1 | xargs rm -rf
 	@find $(DEPSROOT)/fff -type f | grep -v ".gitemptyfolder" | xargs rm -rf
+	@find $(DEPSROOT)/via -type d -mindepth 1 | xargs rm -rf
+	@find $(DEPSROOT)/via -type f | grep -v ".gitemptyfolder" | xargs rm -rf

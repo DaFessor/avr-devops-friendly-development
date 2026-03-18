@@ -21,13 +21,38 @@ include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
 FFF_DIR     := $(DEPSROOT)/fff
+VIALIB_DIR := $(DEPSROOT)/via
+
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(TEST_SRCDIR) -I$(UNITY_DIR)/src -I$(FFF_DIR) -I$(PROD_SRCDIR) -I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(FFF_DIR) $(BUILDDIR)
-vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(BUILDDIR)
-vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(BUILDDIR)
+INCLUDEDIRS := -I$(TEST_SRCDIR) \
+			-I$(UNITY_DIR)/src \
+			-I$(FFF_DIR) \
+			-I$(VIALIB_DIR) \
+			-I$(PROD_SRCDIR) \
+			-I$(BUILDDIR)
+
+vpath %.h $(TEST_SRCDIR) \
+		$(PROD_SRCDIR) \
+		$(UNITY_DIR)/src \
+		$(FFF_DIR) \
+		$(VIALIB_DIR) \
+		$(BUILDDIR)
+
+vpath %.c $(TEST_SRCDIR) \
+		$(PROD_SRCDIR) \
+		$(UNITY_DIR)/src \
+		$(VIALIB_DIR)/driver \
+		$(VIALIB_DIR)/Util \
+		$(BUILDDIR)
+
+vpath %.cpp $(TEST_SRCDIR) \
+		$(PROD_SRCDIR) \
+		$(UNITY_DIR)/src \
+		$(VIALIB_DIR)/driver \
+		$(VIALIB_DIR)/Util \
+		$(BUILDDIR)
 
 $(BUILDROOT)/release:
 	mkdir -p $(BUILDROOT)/release
@@ -35,15 +60,21 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
-target_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_fff alltests
-
-init: $(BUILDROOT)/release $(BUILDROOT)/debug
+init: $(BUILDROOT)/release \
+	$(BUILDROOT)/debug \
+	$(DEPSROOT)/.installed_unity \
+	$(DEPSROOT)/.installed_fff \
+	$(DEPSROOT)/.installed_vialibs
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 $(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
+$(DEPSROOT)/.installed_vialibs:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
+
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
@@ -91,9 +122,7 @@ endef
 # which calls the TEST_DEFINITION macro for each test
 include $(WORKSPACE)/test_list.mk
 
-alltests: $(ALLTESTS)
-
-target_tests: alltests
+target_tests: init $(ALLTESTS)
 	@printf "\n\n********* There are $$(ls $(BUILDDIR)/*.hex | wc -w) flashable target test(s) in $(CONFIG_LOWER) config *********\n"
 	@avr-size $(BUILDDIR)/*.elf | sed "s/elf/hex/"
 	@printf "\n\n"
