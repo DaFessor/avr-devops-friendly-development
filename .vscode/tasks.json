@@ -32,6 +32,36 @@
                 "reset"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "5: Reconnect to Arduino",
+            "command": "microcom",
+            "type": "shell",
+            "args": [
+                "-s",
+                "115200",
+                "/dev/ttyACM0"
+            ],
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation": [
+                    "absolute"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            },
+            "presentation": {
+                "reveal": "always",
+                "revealProblems": "onProblem",
+                "clear": true,
+                "panel": "dedicated"
+            },
         }
     ]
 }
