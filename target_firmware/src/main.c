@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <util/delay.h>
 #include <avr/io.h>
+#include <limits.h>
 #include <avr/interrupt.h>
 #include "serial_com.h"
+#include "calculator.h"
 
 ISR(TIMER1_OVF_vect)
 {
@@ -18,7 +20,7 @@ int main()
     DDRB = 0xff;
     PORTB = 0x00;
 // Buffer for reading input from serial/stdin
-#define INPUT_BUFFER_SIZE 100
+#define INPUT_BUFFER_SIZE 20
     char input_buffer[INPUT_BUFFER_SIZE];
 
     TCCR1B = 0;             // - stop timer while we set it up
@@ -39,25 +41,45 @@ int main()
     // Enable global interrupts
     sei();
 
+    // Print message to serial
+    printf("Hallo from Arduino, let's calcucate!\n\r");
+    // Read input from serial/stdin into input_buffer
     do
     {
-        // Print message to serial
-        printf("Hallo from Arduino, let's communicate!\n\r");
-        // Read input from serial/stdin into input_buffer
+        printf("Please enter a decimal number (%ld to %ld) and press Enter: ", INT32_MIN, INT32_MAX);
         int c, index = 0;
         while (index < INPUT_BUFFER_SIZE - 1)
         {
             c = getchar();
+            // Stop reading if we encounter EOF or a newline character
             if (c == EOF || c == '\n' || c == '\r')
-            {
                 break;
+            // Only accept digits, ignore other characters,
+            // allowing a leading '-' for negative numbers
+            if (c >= '0' && c <= '9' || (c == '-' && index == 0))
+            {
+                input_buffer[index++] = c;
+                // Echo the character read back to the sender
+                putchar(c);
             }
-            input_buffer[index++] = c;
-            // Echo the character read back to the sender
-            putchar(c);
         }
         // Null-terminate the string we read
         input_buffer[index] = '\0';
-        printf("\n\rYou wrote %d chars: %s\n\r", index, input_buffer);
+
+        calctask_t task;
+        if (sscanf(input_buffer, "%ld", &task.operand1) != 1)
+        {
+            printf("\n\rInvalid input. Please enter a valid decimal number.\n\r");
+            continue;
+        }
+        task.operand2 = 42; // Just a dummy value for testing
+        if (calculate(CALC_ADD, &task))
+        {
+            printf("\n\rResult of %ld + %ld = %ld\n\r", task.operand1, task.operand2, task.result);
+        }
+        else
+        {
+            printf("\n\rCalculation failed (unknown operation)\n\r");
+        }
     } while (1);
 }
