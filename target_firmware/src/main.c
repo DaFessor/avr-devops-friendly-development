@@ -12,6 +12,9 @@ ISR(TIMER1_OVF_vect)
     PORTB ^= (1 << PORTB7);
 }
 
+// Enough to hold a 32-bit integer as a string, including sign and null terminator
+#define INPUT_BUFFER_SIZE 12
+
 int main()
 {
     // Initialize the UART for serial communication
@@ -19,8 +22,7 @@ int main()
     // Set all pins of PORTB as output (for the LED)
     DDRB = 0xff;
     PORTB = 0x00;
-// Buffer for reading input from serial/stdin
-#define INPUT_BUFFER_SIZE 20
+    // Buffer for reading input from serial/stdin
     char input_buffer[INPUT_BUFFER_SIZE];
 
     TCCR1B = 0;             // - stop timer while we set it up
@@ -46,27 +48,32 @@ int main()
     // Read input from serial/stdin into input_buffer
     do
     {
-        printf("Please enter a decimal number (%ld to %ld) and press Enter: ", INT32_MIN, INT32_MAX);
+        printf("Please enter a decimal number [%ld .. %ld] and press Enter:\n\r", INT32_MIN, INT32_MAX);
         int c, index = 0;
         while (index < INPUT_BUFFER_SIZE - 1)
         {
             c = getchar();
             // Stop reading if we encounter EOF or a newline character
             if (c == EOF || c == '\n' || c == '\r')
+            {
+                printf("\n\r");
                 break;
+            }
             // Only accept digits, ignore other characters,
-            // allowing a leading '-' for negative numbers
-            if (c >= '0' && c <= '9' || (c == '-' && index == 0))
+            // but allow a leading '-' for negative numbers
+            if ((c >= '0' && c <= '9') || (c == '-' && index == 0))
             {
                 input_buffer[index++] = c;
-                // Echo the character read back to the sender
+                // Echo the character read back to the sender so it shows up in the terminal
                 putchar(c);
             }
         }
+
         // Null-terminate the string we read
         input_buffer[index] = '\0';
 
         calctask_t task;
+        // Convert the input string to a long integer and store it in task.operand1
         if (sscanf(input_buffer, "%ld", &task.operand1) != 1)
         {
             printf("\n\rInvalid input. Please enter a valid decimal number.\n\r");

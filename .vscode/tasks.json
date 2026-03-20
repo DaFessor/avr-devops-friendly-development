@@ -32,6 +32,25 @@
                 "reset"
             ],
             "problemMatcher": []
+        },
+        {
+            "label": "5: Reconnect to target",
+            "command": "${workspaceFolder}/scripts/task_reconnect_target.sh",
+            "type": "shell",
+            "problemMatcher": {
+                "owner": "batch",
+                "fileLocation": [
+                    "absolute"
+                ],
+                "pattern": [
+                    {
+                        "regexp": "^(.*):(\\d+):(.*):FAIL:(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "message": 4
+                    }
+                ]
+            }
         }
     ]
 }
