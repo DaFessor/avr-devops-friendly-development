@@ -17,7 +17,6 @@ WORKSPACE := $(PROJROOT)/target_test
 all: target_tests
 
 include $(PROJROOT)/configs_target.mk
-include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
 FFF_DIR     := $(DEPSROOT)/fff
@@ -78,8 +77,7 @@ $(DEPSROOT)/.installed_vialibs:
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
+	$(CC) -c $(CFLAGS) $(INCLUDEDIRS) -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
@@ -96,8 +94,7 @@ clean:
 $(BUILDDIR)/%_runner.o: %.c
 	ruby $(UNITY_DIR)/auto/generate_test_runner.rb $< $(patsubst %.o,%.c,$@)
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
+	$(CC) -c $(CFLAGS) $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@);
 
 # This looks (extra) complicated, but it's just a way to define what is effectively a macro
 # to generate a rule for each test. The macro is called TEST_DEFINITION and it takes two

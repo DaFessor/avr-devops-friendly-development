@@ -15,7 +15,6 @@ BUILDDIR := $(BUILDROOT)/$(CONFIG_LOWER)
 all: target_firmware
 
 include $(PROJROOT)/configs_target.mk
-include $(wildcard $(BUILDDIR)/*.dep)
 
 VIALIB_DIR := $(DEPSROOT)/via
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
@@ -47,8 +46,7 @@ $(BUILDDIR)/firmware.hex: $(OBJS)
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
+	$(CC) -c $(CFLAGS) $(INCLUDEDIRS) -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \

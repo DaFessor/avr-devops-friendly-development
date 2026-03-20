@@ -16,7 +16,6 @@ WORKSPACE := $(PROJROOT)/native_test
 all: native_tests
 
 include $(PROJROOT)/configs_native.mk
-include $(wildcard $(BUILDDIR)/*.dep)
 
 UNITY_DIR   := $(DEPSROOT)/unity
 CMOCK_DIR   := $(DEPSROOT)/cmock
@@ -66,8 +65,7 @@ $(DEPSROOT)/.installed_vialibs:
 
 $(BUILDDIR)/%.o: %.c
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -MD -MP -MT "$@" -MT"$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) --coverage -o $@ $<
+	$(CC) -c $(CFLAGS) $(INCLUDEDIRS) --coverage -o $@ $<
 
 compile: init $(lastword $(MAKECMDGOALS))
 	cd $(BUILDDIR); \
@@ -77,8 +75,7 @@ compile: init $(lastword $(MAKECMDGOALS))
 
 #%.o: %.cpp
 #	cd $(BUILDDIR); \
-#	$(GCC) -c $(CPPFLAGS) -Werror -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
-#	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $<
+#	$(GCC) -c $(CPPFLAGS) -Werror $(INCLUDEDIRS) -o $@ $<
 
 clean:
 	@find $(BUILDROOT)/debug -type d -mindepth 1 | xargs rm -rf
@@ -89,8 +86,7 @@ clean:
 $(BUILDDIR)/%_runner.o: %.c
 	ruby $(UNITY_DIR)/auto/generate_test_runner.rb $< $(patsubst %.o,%.c,$@)
 	cd $(BUILDDIR); \
-	$(CC) -c $(CFLAGS) -Werror -MD -MP -MT "$@" -MT "$(patsubst %.o,%.dep,$@)" \
-	 -MF "$(patsubst %.o,%.dep,$@)" $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@)
+	$(CC) -c $(CFLAGS) -Werror $(INCLUDEDIRS) -o $@ $(patsubst %.o,%.c,$@)
 
 $(BUILDDIR)/mocks/Mock%.o: %.h
 	cd $(BUILDDIR); \
