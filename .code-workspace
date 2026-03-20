@@ -37,7 +37,10 @@
 			"native_test": true,
 			"external_deps": true,
 			"build": true,
-			"**/.gitemptyfolder": true
+			"**/.gitemptyfolder": true,
+			"**/.vscode": true,
+			"**/Makefile": true,
+			"**/cmock_config.yml": true
 		},
 		"taskExplorer.enabledTasks": {
 			"ant": false,
