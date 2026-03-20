@@ -1,5 +1,4 @@
 #include "serial_com.h"
-
 /* Setup some serial parameters. The baud rate is set at 115200,
  * which results in an error of 2.1% with a 16MHz clock. To avoid
  * a warning we set the tolerance to 3 (%).
@@ -9,7 +8,6 @@
 #include <util/setbaud.h>
 #include <avr/io.h>
 #include <stdio.h>
-
 static int uart_putchar(char c, FILE *stream)
 {
     /* Wait for empty transmit buffer */
@@ -19,7 +17,6 @@ static int uart_putchar(char c, FILE *stream)
     UDR0 = c;
     return 0;
 }
-
 static int uart_getchar(FILE *stream)
 {
     /* Wait for data to be received */
@@ -28,10 +25,8 @@ static int uart_getchar(FILE *stream)
     /* Get and return received data from buffer */
     return UDR0;
 }
-
 static FILE uart_output = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 static FILE uart_input = FDEV_SETUP_STREAM(NULL, uart_getchar, _FDEV_SETUP_READ);
-
 void uart_init()
 {
     UBRR0H = UBRRH_VALUE;
@@ -42,7 +37,7 @@ void uart_init()
     UCSR0A &= ~(_BV(U2X0));
 #endif
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data, no parity, 1 stop */
-    UCSR0B = _BV(RXEN0) | _BV(TXEN0);   /* Enable RX and TX, 8-bit data  */
+    UCSR0B = _BV(RXEN0) | _BV(TXEN0);   /* Enable RX and TX, 8-bit data */
     stdout = &uart_output;
     stdin = &uart_input;
 }
