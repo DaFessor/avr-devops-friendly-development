@@ -2,7 +2,10 @@
 
 /* Setup some serial parameters. The baud rate is set at 115200,
  * which results in an error of 2.1% with a 16MHz clock. To avoid
- * a warning we set the tolerance to 3 (%).
+ * a warning we set the tolerance to 3 (%). It's not important anyway,
+ * since UART does not talk directly on the line/bus, but through
+ * the CH340G USB-to-serial converter, which is quite tolerant to
+ * baud rate errors.
  */
 #define BAUD 115200
 #define BAUD_TOL 3
@@ -43,6 +46,8 @@ void uart_init()
 #endif
     UCSR0C = _BV(UCSZ01) | _BV(UCSZ00); /* 8-bit data, no parity, 1 stop */
     UCSR0B = _BV(RXEN0) | _BV(TXEN0);   /* Enable RX and TX, 8-bit data  */
+    /* Redirect standard input, output and error to the UART */
     stdout = &uart_output;
     stdin = &uart_input;
+    stderr = &uart_output;
 }
