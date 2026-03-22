@@ -28,8 +28,8 @@
 
 # ================== Define all tests BELOW this line ==================
 
-$(eval $(call TEST_DEFINITION, test_add_op.c, serial_com.c add_op.c))
-$(eval $(call TEST_DEFINITION, test_mul_op.c, serial_com.c mul_op.c))
-$(eval $(call TEST_DEFINITION, test_fff.c, serial_com.c))
+$(eval $(call TEST_DEFINITION, test_add_op.c, add_op.c))
+$(eval $(call TEST_DEFINITION, test_mul_op.c, mul_op.c))
+$(eval $(call TEST_DEFINITION, test_fff.c, ))
 
 # ================== Define all tests ABOVE this line ==================
