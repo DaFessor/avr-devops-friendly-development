@@ -1,92 +1,118 @@
-#include <stdio.h>
-#include <util/delay.h>
+/*****************************************************************************
+ * main.c
+ *  Main application file for the IoT hardware drivers demo.
+ *  This file initializes all the hardware drivers and demonstrates their
+ *  functionality.
+ *  Push button 2 on the shield during reset to enter continious sensor
+ *  reading mode. Otherwise the program will run an interactive demo that
+ *  allows you to test each driver individually by sending commands over UART.
+ *  See interactive.c for details.
+ *
+ *  Author:  Erland Larsen
+ *  Date:    2026-03-17
+ *  Project: SPE4_API
+ *****************************************************************************/
 #include <avr/io.h>
-#include <limits.h>
+#include <util/delay.h>
 #include <avr/interrupt.h>
-#include "serial_com.h"
-#include "calculator.h"
+#include <stdio.h>
+#include "interactive.h"
+#include "button.h"
+#include "uart_stdio.h"
+#include "led.h"
+#include "pir.h"
+#include "display.h"
+#include "wifi.h"
+#include "button.h"
+#include "buzzer.h"
+#include "dht11.h"
+#include "proximity.h"
+#include "servo.h"
+#include "adc.h"
+#include "light.h"
+#include "soil.h"
+#include "tone.h"
+//#include "adxl345.h"
+#include "timer.h"
+//#include "adxl345.h"
 
-ISR(TIMER1_OVF_vect)
+uint8_t humidity_integer, humidity_decimal, temperature_integer, temperature_decimal;
+static int8_t _led_no = 0;
+//static int16_t _x, _y, _z;
+
+void timer_callback(uint8_t id)
 {
-    // Toggle the LED connected to PB5 (Arduino Uno's built-in LED)
-    PORTB ^= (1 << PORTB7);
+    led_toggle((_led_no%4) + 1); // Toggle LEDs in sequence 1-4
+    _led_no++;
 }
 
-// Enough to hold a 32-bit integer as a string, including sign and null terminator
-#define INPUT_BUFFER_SIZE 12
-
-int main()
+int main(void)
 {
-    // Initialize the UART for serial communication
-    uart_init();
-    // Set all pins of PORTB as output (for the LED)
-    DDRB = 0xff;
-    PORTB = 0x00;
-    // Buffer for reading input from serial/stdin
-    char input_buffer[INPUT_BUFFER_SIZE];
+    led_init();
+    button_init();
+    display_init();
+    proximity_init();
+    light_init();
+    soil_init(ADC_PK0);
+    pir_init(pir_callback);
+//    tone_init();
+    wifi_init();
+    servo_init(PWM_NORMAL);
+//    adxl345_init();
 
-    TCCR1B = 0;             // - stop timer while we set it up
-    TCCR1A = 0;             // - normal mode, OC1A/OC1B disconnected
-    TCNT1 = 0;              // - reset timer count to 0
-    TIFR1 |= (1 << TOV1);   // - clear any stale flag
-    TIMSK1 |= (1 << TOIE1); // - enable overflow interrupt
-    /*
-        Normal mode, prescaler/256 (last instruction also starts timer).
-        The timer will count up from 0 to 0xffff, and then start all over
-        - whenever the timer goes back to 0 an interrupt is generated.
-        A prescaler of 256 means that the clock (16MHz) is divided by 256 = 62500.
-        So the reset/interrupt freq. is 65536/62500 = 1,048576 Hz.
-        Writing to TCCR1B also starts the timer, so we do it at the end of the setup
-    */
-    TCCR1B |= 0x04;
-
-    // Enable global interrupts
-    sei();
-
-    // Print message to serial
-    printf("Hallo from Arduino, let's calcucate!\n\r");
-    // Read input from serial/stdin into input_buffer
-    do
+    if (UART_OK != uart_stdio_init(115200))
     {
-        printf("Please enter a decimal number [%ld .. %ld] and press Enter:\n\r", INT32_MIN, INT32_MAX);
-        int c, index = 0;
-        while (index < INPUT_BUFFER_SIZE - 1)
-        {
-            c = getchar();
-            // Stop reading if we encounter EOF or a newline character
-            if (c == EOF || c == '\n' || c == '\r')
-            {
-                printf("\n\r");
-                break;
-            }
-            // Only accept digits, ignore other characters,
-            // but allow a leading '-' for negative numbers
-            if ((c >= '0' && c <= '9') || (c == '-' && index == 0))
-            {
-                input_buffer[index++] = c;
-                // Echo the character read back to the sender so it shows up in the terminal
-                putchar(c);
-            }
-        }
+        led_on(4); // Turn on LED4 to indicate error
+        while (1)
+            ;
+    }
+    sei(); // Enable global interrupts
+    printf("VIA UNIVERSITY COLLEGE SEP4 IoT Hardware DRIVERS DEMO\n");
+    if(!button_get(2))
+    {
+        interactive_demo();
+    }
 
-        // Null-terminate the string we read
-        input_buffer[index] = '\0';
+    timer_create_sw(timer_callback, 1000); // Create a timer that toggles an LED every 1 second
 
-        calctask_t task;
-        // Convert the input string to a long integer and store it in task.operand1
-        if (sscanf(input_buffer, "%ld", &task.operand1) != 1)
-        {
-            printf("\n\rInvalid input. Please enter a valid decimal number.\n\r");
-            continue;
-        }
-        task.operand2 = 42; // Just a dummy value for testing
-        if (calculate(CALC_ADD, &task))
-        {
-            printf("\n\rResult of %ld + %ld = %ld\n\r", task.operand1, task.operand2, task.result);
-        }
-        else
-        {
-            printf("\n\rCalculation failed (unknown operation)\n\r");
-        }
-    } while (1);
+    tone_play_starwars();
+
+    // Test servo by sweeping from -90 to +90 degrees and back
+    servo_start();
+    for(int i=-90; i<=90; i+=10)
+    {
+        servo_setAngle(PWM_A, (int8_t)i);
+        printf("Servo set to %d degrees.\n", i);
+        _delay_ms(100);
+    }
+    servo_stop();
+
+    // Test WiFi by sending AT command and printing response
+    if(WIFI_OK == wifi_command_AT())
+    {
+        printf("WiFi module responded to AT command.\n");
+    }
+    else
+    {
+        printf("WiFi module did not respond to AT command.\n");
+    }
+
+    buzzer_beep();
+
+    // Continuous sensor readings
+    while (1)
+    {
+        dht11_get(&humidity_integer, &humidity_decimal, &temperature_integer, &temperature_decimal);
+        printf("Temperature: %d.%d°C, Humidity: %d.%d%%", temperature_integer, temperature_decimal, humidity_integer, humidity_decimal);
+        display_setDecimals(1);
+        display_int(temperature_integer*10 + temperature_decimal);
+        printf(" Light: %d ", light_measure_raw());
+        printf(" Soil: %d", soil_measure_raw(ADC_PK0));
+        printf(" Distance: %d mm", proximity_measure());
+        // adxl345_read_xyz(&_x, &_y, &_z);
+        // printf(" Accel: X=%d Y=%d Z=%d", _x, _y, _z);
+        printf(" Motion: %s", (pir_get_state() == PIR_NO_MOTION) ? "No" : "Yes");
+       puts("");
+        _delay_ms(2000);
+    }
 }
