@@ -20,7 +20,7 @@ include $(PROJROOT)/configs_native.mk
 UNITY_DIR   := $(DEPSROOT)/unity
 CMOCK_DIR   := $(DEPSROOT)/cmock
 FFF_DIR     := $(DEPSROOT)/fff
-VIALIB_DIR := $(DEPSROOT)/via
+SEP4LIB_DIR := $(PROJROOT)/build/deps_/sep4lib
 
 TEST_SRCDIR := $(PROJROOT)/native_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
@@ -29,12 +29,12 @@ INCLUDEDIRS := -I$(UNITY_DIR)/src \
 				-I$(FFF_DIR) \
 				-I$(PROD_SRCDIR) \
 				-I$(TEST_SRCDIR) \
-				-I$(VIALIB_DIR) \
+				-I$(SEP4LIB_DIR)/include \
 				-I$(BUILDDIR)
 
-vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(VIALIB_DIR) $(BUILDDIR)
-vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(VIALIB_DIR) $(BUILDDIR)
-vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(VIALIB_DIR) $(BUILDDIR)
+vpath %.h $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(FFF_DIR) $(SEP4LIB_DIR)/include $(BUILDDIR)
+vpath %.c $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
+vpath %.cpp $(TEST_SRCDIR) $(PROD_SRCDIR) $(UNITY_DIR)/src $(CMOCK_DIR)/src $(BUILDDIR)
 
 native_tests: init $(DEPSROOT)/.installed_unity $(DEPSROOT)/.installed_cmock $(DEPSROOT)/.installed_fff alltests
 
@@ -48,7 +48,7 @@ init: $(BUILDROOT)/release $(BUILDROOT)/debug \
 	$(DEPSROOT)/.installed_unity \
 	$(DEPSROOT)/.installed_fff \
 	$(DEPSROOT)/.installed_cmock \
-	$(DEPSROOT)/.installed_vialibs
+	$(DEPSROOT)/.installed_sep4lib
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
@@ -59,7 +59,7 @@ $(DEPSROOT)/.installed_cmock:
 $(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
-$(DEPSROOT)/.installed_vialibs:
+$(DEPSROOT)/.installed_sep4lib:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 

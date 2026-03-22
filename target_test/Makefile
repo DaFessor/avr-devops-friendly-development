@@ -18,9 +18,15 @@ all: target_tests
 
 include $(PROJROOT)/configs_target.mk
 
+ifeq (RELEASE,$(CONFIG))
+SEP4_LIB := sep4_hw_rel
+else
+SEP4_LIB := sep4_hw_dbg
+endif
+
 UNITY_DIR   := $(DEPSROOT)/unity
 FFF_DIR     := $(DEPSROOT)/fff
-VIALIB_DIR := $(DEPSROOT)/via
+SEP4LIB_DIR := $(DEPSROOT)/sep4lib
 
 TEST_SRCDIR := $(PROJROOT)/target_test/src
 PROD_SRCDIR := $(PROJROOT)/target_firmware/src
@@ -28,7 +34,7 @@ PROD_SRCDIR := $(PROJROOT)/target_firmware/src
 INCLUDEDIRS := -I$(TEST_SRCDIR) \
 			-I$(UNITY_DIR)/src \
 			-I$(FFF_DIR) \
-			-I$(VIALIB_DIR) \
+			-I$(SEP4LIB_DIR)/include \
 			-I$(PROD_SRCDIR) \
 			-I$(BUILDDIR)
 
@@ -36,21 +42,17 @@ vpath %.h $(TEST_SRCDIR) \
 		$(PROD_SRCDIR) \
 		$(UNITY_DIR)/src \
 		$(FFF_DIR) \
-		$(VIALIB_DIR) \
+		$(SEP4LIB_DIR)/include \
 		$(BUILDDIR)
 
 vpath %.c $(TEST_SRCDIR) \
 		$(PROD_SRCDIR) \
 		$(UNITY_DIR)/src \
-		$(VIALIB_DIR)/driver \
-		$(VIALIB_DIR)/Util \
 		$(BUILDDIR)
 
 vpath %.cpp $(TEST_SRCDIR) \
 		$(PROD_SRCDIR) \
 		$(UNITY_DIR)/src \
-		$(VIALIB_DIR)/driver \
-		$(VIALIB_DIR)/Util \
 		$(BUILDDIR)
 
 $(BUILDROOT)/release:
@@ -107,7 +109,7 @@ $(BUILDDIR)/$(patsubst %.c,%.hex,$(strip $(1))): \
 	$(BUILDDIR)/unity.o $(patsubst %.c,$(BUILDDIR)/%.o,$(1) $(2) serial_com.c)
 	$(eval BUILDFILE=$(patsubst %.c,%,$(strip $(1))))
 	cd $(BUILDDIR);\
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILDFILE).elf $$(notdir $$^) -Wl,--library-path $(WORKSPACE)/build/lib -Wl,-Map=$(BUILDFILE).map -Wl,--start-group $(LIBS) -Wl,--end-group ;\
+	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILDFILE).elf $$(notdir $$^) -Wl,--library-path $(SEP4LIB_DIR) -Wl,-Map=$(BUILDFILE).map -Wl,--start-group $(LIBS) -l$(SEP4_LIB) -Wl,--end-group ;\
 	avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures $(BUILDFILE).elf $(BUILDFILE).hex ;\
 	avr-objcopy -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0 --no-change-warnings -O ihex $(BUILDFILE).elf $(BUILDFILE).eep || exit 0 ;\
 	avr-objdump -h -S $(BUILDFILE).elf > $(BUILDFILE).lss ;\
