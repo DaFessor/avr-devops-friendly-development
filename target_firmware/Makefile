@@ -10,6 +10,7 @@ endif
 BUILDROOT := $(PROJROOT)/build/target_firmware_
 CONFIG_LOWER := $(shell echo $(CONFIG) | tr A-Z a-z)
 BUILDDIR := $(BUILDROOT)/$(CONFIG_LOWER)
+DEPSROOT := $(PROJROOT)/build/deps_
 
 .PHONY: all
 all: target_firmware
@@ -38,7 +39,10 @@ $(BUILDROOT)/release:
 $(BUILDROOT)/debug:
 	mkdir -p $(BUILDROOT)/debug
 
-init: $(BUILDROOT)/release $(BUILDROOT)/debug
+init: $(BUILDROOT)/release $(BUILDROOT)/debug $(DEPSROOT)/.installed_sep4lib
+
+$(DEPSROOT)/.installed_sep4lib:
+	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 # The firmware file effectively depends on all .c files in $(APP_SRC).
 $(BUILDDIR)/firmware.hex: $(OBJS)

@@ -65,7 +65,7 @@ init: $(BUILDROOT)/release \
 	$(BUILDROOT)/debug \
 	$(DEPSROOT)/.installed_unity \
 	$(DEPSROOT)/.installed_fff \
-	$(DEPSROOT)/.installed_vialibs
+	$(DEPSROOT)/.installed_sep4lib
 
 $(DEPSROOT)/.installed_unity:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
@@ -73,7 +73,7 @@ $(DEPSROOT)/.installed_unity:
 $(DEPSROOT)/.installed_fff:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
-$(DEPSROOT)/.installed_vialibs:
+$(DEPSROOT)/.installed_sep4lib:
 	@$(MAKE) --directory=$(DEPSROOT) --no-builtin-rules --makefile=$(PROJROOT)/external_deps/Makefile
 
 
