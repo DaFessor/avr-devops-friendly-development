@@ -104,7 +104,7 @@ define TEST_DEFINITION =
 ALLTESTS += $(BUILDDIR)/$(patsubst %.c,%.hex,$(strip $(1)))
 $(BUILDDIR)/$(patsubst %.c,%.hex,$(strip $(1))): \
 	$(BUILDDIR)/$(patsubst %.c,%,$(strip $(1)))_runner.o \
-	$(BUILDDIR)/unity.o $(patsubst %.c,$(BUILDDIR)/%.o,$(1) $(2))
+	$(BUILDDIR)/unity.o $(patsubst %.c,$(BUILDDIR)/%.o,$(1) $(2) serial_com.c)
 	$(eval BUILDFILE=$(patsubst %.c,%,$(strip $(1))))
 	cd $(BUILDDIR);\
 	$(CC) $(CFLAGS) $(LDFLAGS) -o $(BUILDFILE).elf $$(notdir $$^) -Wl,--library-path $(WORKSPACE)/build/lib -Wl,-Map=$(BUILDFILE).map -Wl,--start-group $(LIBS) -Wl,--end-group ;\

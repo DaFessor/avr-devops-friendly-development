@@ -6,7 +6,7 @@
             "compilerArgs": [
                 "-funsigned-char -funsigned-bitfields -DF_CPU=16000000L -ffunction-sections -fdata-sections -fpack-struct -fshort-enums -mrelax -Wall -mmcu=atmega2560"
             ],
-            "intelliSenseMode": "gcc-x64",
+            "intelliSenseMode": "linux-gcc-x64",
             "includePath": [
                 "/usr/avr/include/**",
                 "/usr/lib/gcc/avr/15.2.0/include/**",
