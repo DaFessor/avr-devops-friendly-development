@@ -16,12 +16,18 @@ all: target_firmware
 
 include $(PROJROOT)/configs_target.mk
 
-VIALIB_DIR := $(DEPSROOT)/via
-PROD_SRCDIR := $(PROJROOT)/target_firmware/src
-INCLUDEDIRS := -I$(PROD_SRCDIR) -I$(VIALIB_DIR) -I$(BUILDDIR)
+ifeq (RELEASE,$(CONFIG))
+SEP4_LIB := sep4_hw_rel
+else
+SEP4_LIB := sep4_hw_dbg
+endif
 
-vpath %.h $(PROD_SRCDIR) $(VIALIB_DIR) $(BUILDDIR)
-vpath %.c $(PROD_SRCDIR) $(VIALIB_DIR)/driver $(VIALIB_DIR)/Util $(BUILDDIR)
+SEP4LIB_DIR := $(PROJROOT)/build/deps_/sep4lib
+PROD_SRCDIR := $(PROJROOT)/target_firmware/src
+INCLUDEDIRS := -I$(PROD_SRCDIR) -I$(SEP4LIB_DIR)/include -I$(BUILDDIR)
+
+vpath %.h $(PROD_SRCDIR) $(SEP4LIB_DIR)/include $(BUILDDIR)
+vpath %.c $(PROD_SRCDIR) $(BUILDDIR)
 
 SRCS := $(wildcard $(PROD_SRCDIR)/*.c)
 OBJS := $(patsubst $(PROD_SRCDIR)/%.c,$(BUILDDIR)/%.o,$(SRCS))
@@ -37,7 +43,7 @@ init: $(BUILDROOT)/release $(BUILDROOT)/debug
 # The firmware file effectively depends on all .c files in $(APP_SRC).
 $(BUILDDIR)/firmware.hex: $(OBJS)
 	cd $(BUILDDIR);\
-	$(CC) $(CFLAGS) $(LDFLAGS) -o firmware.elf $(notdir $^) -Wl,--library-path $(WORKSPACE)/build/lib -Wl,-Map=firmware.map -Wl,--start-group $(LIBS) -Wl,--end-group ;\
+	$(CC) $(CFLAGS) $(LDFLAGS) -o firmware.elf $(notdir $^) -Wl,--library-path $(SEP4LIB_DIR) -Wl,-Map=firmware.map -Wl,--start-group $(LIBS) -l$(SEP4_LIB) -Wl,--end-group ;\
 	avr-objcopy -O ihex -R .eeprom -R .fuse -R .lock -R .signature -R .user_signatures firmware.elf firmware.hex ;\
 	avr-objcopy -j .eeprom --set-section-flags=.eeprom=alloc,load --change-section-lma .eeprom=0 --no-change-warnings -O ihex firmware.elf firmware.eep || exit 0 ;\
 	avr-objdump -h -S firmware.elf > firmware.lss ;\

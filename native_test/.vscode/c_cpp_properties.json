@@ -23,7 +23,7 @@
                 "${workspaceFolder}/../build/deps_/unity/src",
                 "${workspaceFolder}/../build/deps_/cmock/src",
                 "${workspaceFolder}/../build/deps_/fff/**",
-                "${workspaceFolder}/../build/deps_/via/**",
+                "${workspaceFolder}/../build/deps_/sep4lib/include/**",
                 "${workspaceFolder}/../build/native_test_/release/**",
                 "${workspaceFolder}/../build/native_test_/debug/**",
                 "${workspaceFolder}/../build/native_test_/release/mocks/**",
