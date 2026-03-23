@@ -1,3 +1,4 @@
 :cmock:
       :plugins:
         - :callback
+      :when_ptr: :compare_ptr
