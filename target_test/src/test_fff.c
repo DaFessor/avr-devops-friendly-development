@@ -41,4 +41,5 @@ void test_fff(void)
     add_op_fake.return_val = 3;
     int c = add_op(&calctask);
     TEST_ASSERT_EQUAL(3, c);
+    TEST_ASSERT_TRUE(add_op_fake.call_count == 1);
 }

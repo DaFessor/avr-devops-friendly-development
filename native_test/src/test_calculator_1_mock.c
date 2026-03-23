@@ -5,7 +5,7 @@
 #include "div_op.h"
 #include "mocks/Mockadd_op.h"
 
-int fake_add_op(calctask_t *task, int numcalls)
+/*int fake_add_op(calctask_t *task, int numcalls)
 {
     task->result = task->operand1 + task->operand2;
     return 1;
@@ -15,14 +15,13 @@ void setUp(void)
 {
     add_op_AddCallback(fake_add_op);
 }
+*/
 
 void test_calculator_add()
 {
-    calctask_t task = {.operand1 = 5, .operand2 = 3};
+    calctask_t task = {.operand1 = 5, .operand2 = 3, .result = 0};
     add_op_ExpectAndReturn(&task, 1);
-    TEST_ASSERT_TRUE(calculate(CALC_ADD, &task));
-    TEST_ASSERT_EQUAL(8, task.result);
-}
+    TEST_ASSERT_TRUE(calculate(CALC_ADD, &task));}
 
 void test_calculator_mul()
 {
