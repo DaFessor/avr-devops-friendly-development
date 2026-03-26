@@ -1,7 +1,7 @@
 # Made4DevOps
 **M**odern **A**rduino **D**velopment **E**nvironment for **DevOps**
 
-In the doc folder there is a user guide for how to use the project. [Click here see/download the user guide](https://raw.githubusercontent.com/DaFessor/made4devops/refs/heads/main/docs/Made4DevOps-Guide-v4.pdf).
+In the doc folder there is a user guide for how to use the project.
 
 [Click here to get latest firmware version and see test coverage report](https://dafessor.github.io/made4devops/)
 
