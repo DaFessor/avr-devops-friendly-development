@@ -30,6 +30,6 @@
 
 $(eval $(call TEST_DEFINITION, test_add_op.c, add_op.c))
 $(eval $(call TEST_DEFINITION, test_mul_op.c, mul_op.c))
-$(eval $(call TEST_DEFINITION, test_fff.c, calculator.c mul_op.c div_op.c sub_op.c))
+$(eval $(call TEST_DEFINITION, test_calculate_add_op.c, calculator.c mul_op.c div_op.c sub_op.c))
 
 # ================== Define all tests ABOVE this line ==================
